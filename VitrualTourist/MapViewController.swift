@@ -20,7 +20,7 @@ class MapViewController: UIViewController {
     @IBOutlet weak var trashButton: UIBarButtonItem!
     
     lazy var coreDataStack: CoreDataStack = {
-        return (UIApplication.sharedApplication().delegate as! AppDelegate).coreDataStack!
+        return (UIApplication.sharedApplication().delegate as! AppDelegate).coreDataStack
     }()
     lazy var pins = [Pin]()
     
@@ -69,14 +69,8 @@ extension MapViewController {
             let point = sender.locationInView(mapView)
             let coordinate = self.mapView.convertPoint(point, toCoordinateFromView: mapView)
             let id = NSUUID().UUIDString
-
-            let pin = NSEntityDescription.insertNewObjectForEntityForName("Pin", inManagedObjectContext: coreDataStack.context) as! Pin
-            pin.dateCreated = NSDate()
-            pin.latitude = NSNumber(double: coordinate.latitude)
-            pin.longitude = NSNumber(double: coordinate.longitude)
-            pin.id = id
             
-            coreDataStack.saveContext()
+            let _ = Pin(context:coreDataStack.context, id: id, latitude: coordinate.latitude, longitude: coordinate.longitude)
             
             let annotaion = VTMKPointAnnotation()
             annotaion.coordinate = coordinate
@@ -199,7 +193,6 @@ extension MapViewController: MKMapViewDelegate {
                     }
 
                     pin.isSelected = NSNumber(bool: !(Bool(pin.isSelected!)))
-                    self.coreDataStack.saveContext()
                     
                     pinAnnotation.isSelected = Bool(pin.isSelected!)
                     pinView.pinTintColor = Bool(pin.isSelected!) ? MKPinAnnotationView.greenPinColor() : MKPinAnnotationView.redPinColor()
@@ -225,11 +218,25 @@ extension MapViewController: MKMapViewDelegate {
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, didChangeDragState newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
         
         if !isSelecting {
-            
             if newState == .Ending {
-                let droppedAt = view.annotation?.coordinate
-
-                print(droppedAt)
+                let pointAnnotation = view.annotation as! VTMKPointAnnotation
+                
+                let predicate = NSPredicate(format: "id == %@", pointAnnotation.id)
+                fetchPinsWithPredicate(predicate) { results in
+                    guard let results = results else {
+                        return
+                    }
+                    
+                    guard let pin = results.first else {
+                        return
+                    }
+                    
+                    pin.latitude = NSNumber(double: pointAnnotation.coordinate.latitude)
+                    pin.longitude = NSNumber(double: pointAnnotation.coordinate.longitude)
+                    pin.dateUpdated = NSDate()
+                }
+                
+                
             }
         }
     }
@@ -290,7 +297,6 @@ extension MapViewController {
             for pin in results {
                 pin.isSelected = false
             }
-            self.coreDataStack.saveContext()
         }
 
     }
@@ -307,7 +313,6 @@ extension MapViewController {
                 self.coreDataStack.context.deleteObject(pin)
             }
             
-            self.coreDataStack.saveContext()
         }
         
         for annotation in mapView.annotations {
