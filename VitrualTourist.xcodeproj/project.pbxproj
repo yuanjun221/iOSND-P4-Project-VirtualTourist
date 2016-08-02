@@ -15,6 +15,7 @@
 		BF33B8C21D4F0B7000DE432D /* Photo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF33B8BE1D4F0B7000DE432D /* Photo+CoreDataProperties.swift */; };
 		BF33B8C31D4F0B7000DE432D /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF33B8BF1D4F0B7000DE432D /* Photo.swift */; };
 		BF33B8C71D4F765A00DE432D /* VTMKPointAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF33B8C61D4F765A00DE432D /* VTMKPointAnnotation.swift */; };
+		BF33B8CA1D50758000DE432D /* VTMKPinAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF33B8C91D50758000DE432D /* VTMKPinAnnotationView.swift */; };
 		BF4849541D4C5F6000694CFE /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF4849531D4C5F6000694CFE /* MapKit.framework */; };
 		BFC0C51D1D4B63DB00631AB7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC0C51C1D4B63DB00631AB7 /* AppDelegate.swift */; };
 		BFC0C51F1D4B63DB00631AB7 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC0C51E1D4B63DB00631AB7 /* MapViewController.swift */; };
@@ -32,6 +33,7 @@
 		BF33B8BE1D4F0B7000DE432D /* Photo+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Photo+CoreDataProperties.swift"; path = "../Photo+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		BF33B8BF1D4F0B7000DE432D /* Photo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Photo.swift; path = ../Photo.swift; sourceTree = "<group>"; };
 		BF33B8C61D4F765A00DE432D /* VTMKPointAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VTMKPointAnnotation.swift; sourceTree = "<group>"; };
+		BF33B8C91D50758000DE432D /* VTMKPinAnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VTMKPinAnnotationView.swift; sourceTree = "<group>"; };
 		BF4849531D4C5F6000694CFE /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		BFC0C5191D4B63DB00631AB7 /* VitrualTourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VitrualTourist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFC0C51C1D4B63DB00631AB7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -70,9 +72,17 @@
 			isa = PBXGroup;
 			children = (
 				BFC0C51E1D4B63DB00631AB7 /* MapViewController.swift */,
-				BF33B8C61D4F765A00DE432D /* VTMKPointAnnotation.swift */,
 			);
 			name = ViewController;
+			sourceTree = "<group>";
+		};
+		BF33B8C81D50754400DE432D /* SubView */ = {
+			isa = PBXGroup;
+			children = (
+				BF33B8C61D4F765A00DE432D /* VTMKPointAnnotation.swift */,
+				BF33B8C91D50758000DE432D /* VTMKPinAnnotationView.swift */,
+			);
+			name = SubView;
 			sourceTree = "<group>";
 		};
 		BFC0C5101D4B63DB00631AB7 = {
@@ -97,6 +107,7 @@
 			children = (
 				BF33B8C41D4F26A200DE432D /* Model */,
 				BF33B8C51D4F26BF00DE432D /* ViewController */,
+				BF33B8C81D50754400DE432D /* SubView */,
 				BFC0C51C1D4B63DB00631AB7 /* AppDelegate.swift */,
 				BF33B8B51D4C7CEE00DE432D /* CoreDataStack.swift */,
 				BF33B8BA1D4D9DB100DE432D /* GCDBlackBox.swift */,
@@ -140,6 +151,7 @@
 				TargetAttributes = {
 					BFC0C5181D4B63DB00631AB7 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = H538546BFP;
 						SystemCapabilities = {
 							com.apple.Maps.iOS = {
 								enabled = 1;
@@ -188,6 +200,7 @@
 				BF33B8B61D4C7CEE00DE432D /* CoreDataStack.swift in Sources */,
 				BF33B8C01D4F0B7000DE432D /* Pin+CoreDataProperties.swift in Sources */,
 				BF33B8C71D4F765A00DE432D /* VTMKPointAnnotation.swift in Sources */,
+				BF33B8CA1D50758000DE432D /* VTMKPinAnnotationView.swift in Sources */,
 				BF33B8C31D4F0B7000DE432D /* Photo.swift in Sources */,
 				BFC0C51F1D4B63DB00631AB7 /* MapViewController.swift in Sources */,
 				BFC0C51D1D4B63DB00631AB7 /* AppDelegate.swift in Sources */,
@@ -306,10 +319,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = VitrualTourist/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yuanjun.VitrualTourist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -317,10 +333,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = VitrualTourist/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yuanjun.VitrualTourist;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

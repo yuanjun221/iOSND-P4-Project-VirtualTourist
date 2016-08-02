@@ -166,11 +166,12 @@ extension MapViewController: MKMapViewDelegate {
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         
         let reuseId = "pin"
-        var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
+        var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? VTMKPinAnnotationView
         pinView?.pinTintColor = MKPinAnnotationView.redPinColor()
         
         if pinView == nil {
-            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView = VTMKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView!.draggable = true
             pinView!.canShowCallout = false
             pinView!.animatesDrop = true
         } else {
@@ -181,10 +182,12 @@ extension MapViewController: MKMapViewDelegate {
     }
     
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
+        
         if isSelecting {
             if let pinView = view as? MKPinAnnotationView {
                 
-                let predicate = NSPredicate(format: "id == %@", (pinView.annotation as! VTMKPointAnnotation).id)
+                let pinAnnotation = pinView.annotation as! VTMKPointAnnotation
+                let predicate = NSPredicate(format: "id == %@", pinAnnotation.id)
                 
                 fetchPinsWithPredicate(predicate) { results in
                     guard let results = results else {
@@ -197,7 +200,8 @@ extension MapViewController: MKMapViewDelegate {
 
                     pin.isSelected = NSNumber(bool: !(Bool(pin.isSelected!)))
                     self.coreDataStack.saveContext()
-
+                    
+                    pinAnnotation.isSelected = Bool(pin.isSelected!)
                     pinView.pinTintColor = Bool(pin.isSelected!) ? MKPinAnnotationView.greenPinColor() : MKPinAnnotationView.redPinColor()
                     
                     self.pinsSelected += Bool(pin.isSelected!) ? 1 : -1
@@ -213,7 +217,19 @@ extension MapViewController: MKMapViewDelegate {
                     
                 }
 
-                mapView.deselectAnnotation(view.annotation, animated: true)
+                mapView.deselectAnnotation(view.annotation, animated: false)
+            }
+        }
+    }
+    
+    func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, didChangeDragState newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
+        
+        if !isSelecting {
+            
+            if newState == .Ending {
+                let droppedAt = view.annotation?.coordinate
+
+                print(droppedAt)
             }
         }
     }
@@ -289,17 +305,18 @@ extension MapViewController {
             
             for pin in results {
                 self.coreDataStack.context.deleteObject(pin)
-
-                for annotation in self.mapView.annotations {
-                    let pinAnnotation = annotation as! VTMKPointAnnotation
-                    if pinAnnotation.id == pin.id {
-                        self.mapView.removeAnnotation(annotation)
-                    }
-                }
             }
             
             self.coreDataStack.saveContext()
         }
+        
+        for annotation in mapView.annotations {
+            let pinAnnotation = annotation as! VTMKPointAnnotation
+            if pinAnnotation.isSelected == true {
+                mapView.removeAnnotation(annotation)
+            }
+        }
+
     }
     
 }
