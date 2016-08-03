@@ -100,14 +100,24 @@ extension MapViewController {
         }
         
         if isSelecting {
+            
+            enableDraggableForAnnotationView(false)
+            
             fetchExistedPins()
+  
         } else {
+            
+            enableDraggableForAnnotationView(true)
+            
             setPinsDeselected()
             
             for annotation in mapView.annotations {
                 let annotaionView = mapView.viewForAnnotation(annotation) as! MKPinAnnotationView
-                if annotaionView.pinTintColor == MKPinAnnotationView.greenPinColor() {
+                let pinAnnotation = annotaionView.annotation as! VTMKPointAnnotation
+                
+                if pinAnnotation.isSelected {
                     annotaionView.pinTintColor = MKPinAnnotationView.redPinColor()
+                    pinAnnotation.isSelected = false
                 }
             }
             
@@ -115,6 +125,8 @@ extension MapViewController {
             infoLabel.text = "Tap pins to select"
             trashButton.enabled = false
         }
+        
+        
     }
     
     @IBAction func trashButtonPressed(sender: AnyObject) {
@@ -151,6 +163,18 @@ extension MapViewController {
         infoLabel.text = "Tap pins to select"
         trashButton.enabled = false
     }
+    
+    func enableDraggableForAnnotationView(enabled: Bool) {
+        for annotation in mapView.annotations {
+            
+            let pinAnnotation = annotation as! VTMKPointAnnotation
+            pinAnnotation.draggable = enabled
+            
+            if let annotationView = mapView.viewForAnnotation(annotation) {
+                annotationView.draggable = enabled
+            }
+        }
+    }
 }
 
 
@@ -165,12 +189,13 @@ extension MapViewController: MKMapViewDelegate {
         
         if pinView == nil {
             pinView = VTMKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-            pinView!.draggable = true
             pinView!.canShowCallout = false
             pinView!.animatesDrop = true
         } else {
             pinView!.annotation = annotation
         }
+        
+        pinView!.draggable = (annotation as! VTMKPointAnnotation).draggable
         
         return pinView
     }
@@ -178,7 +203,9 @@ extension MapViewController: MKMapViewDelegate {
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
         
         if isSelecting {
-            if let pinView = view as? MKPinAnnotationView {
+            view.setSelected(false, animated: false)
+            
+            if let pinView = view as? VTMKPinAnnotationView {
                 
                 let pinAnnotation = pinView.annotation as! VTMKPointAnnotation
                 let predicate = NSPredicate(format: "id == %@", pinAnnotation.id)
@@ -209,16 +236,17 @@ extension MapViewController: MKMapViewDelegate {
                     }
                     
                 }
-
-                mapView.deselectAnnotation(view.annotation, animated: false)
             }
         }
+        
+        mapView.deselectAnnotation(view.annotation, animated: false)
     }
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, didChangeDragState newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
         
         if !isSelecting {
             if newState == .Ending {
+                
                 let pointAnnotation = view.annotation as! VTMKPointAnnotation
                 
                 let predicate = NSPredicate(format: "id == %@", pointAnnotation.id)
@@ -235,8 +263,7 @@ extension MapViewController: MKMapViewDelegate {
                     pin.longitude = NSNumber(double: pointAnnotation.coordinate.longitude)
                     pin.dateUpdated = NSDate()
                 }
-                
-                
+             
             }
         }
     }
@@ -321,6 +348,8 @@ extension MapViewController {
                 mapView.removeAnnotation(annotation)
             }
         }
+        
+        enableDraggableForAnnotationView(true)
 
     }
     

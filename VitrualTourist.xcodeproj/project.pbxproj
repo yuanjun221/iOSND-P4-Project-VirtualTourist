@@ -22,6 +22,7 @@
 		BFC0C5221D4B63DB00631AB7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BFC0C5201D4B63DB00631AB7 /* Main.storyboard */; };
 		BFC0C5241D4B63DB00631AB7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFC0C5231D4B63DB00631AB7 /* Assets.xcassets */; };
 		BFC0C5271D4B63DB00631AB7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BFC0C5251D4B63DB00631AB7 /* LaunchScreen.storyboard */; };
+		BFF0FCA51D50A2AF00A1E46E /* PhotoAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF0FCA41D50A2AF00A1E46E /* PhotoAlbumViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		BFC0C5231D4B63DB00631AB7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BFC0C5261D4B63DB00631AB7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BFC0C5281D4B63DB00631AB7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		BFF0FCA41D50A2AF00A1E46E /* PhotoAlbumViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoAlbumViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				BFC0C51E1D4B63DB00631AB7 /* MapViewController.swift */,
+				BFF0FCA41D50A2AF00A1E46E /* PhotoAlbumViewController.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -203,6 +206,7 @@
 				BF33B8CA1D50758000DE432D /* VTMKPinAnnotationView.swift in Sources */,
 				BF33B8C31D4F0B7000DE432D /* Photo.swift in Sources */,
 				BFC0C51F1D4B63DB00631AB7 /* MapViewController.swift in Sources */,
+				BFF0FCA51D50A2AF00A1E46E /* PhotoAlbumViewController.swift in Sources */,
 				BFC0C51D1D4B63DB00631AB7 /* AppDelegate.swift in Sources */,
 				BF33B8B91D4C7E5E00DE432D /* VirtualTourist.xcdatamodeld in Sources */,
 				BF33B8C21D4F0B7000DE432D /* Photo+CoreDataProperties.swift in Sources */,

@@ -12,8 +12,16 @@ import MapKit
 class VTMKPinAnnotationView: MKPinAnnotationView {
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        
         self.setSelected(true, animated: false)
         super.touchesBegan(touches, withEvent: event)
+    }
+    
+    
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        
+        self.setSelected(false, animated: false)
+        super.touchesEnded(touches, withEvent: event)
     }
     
 

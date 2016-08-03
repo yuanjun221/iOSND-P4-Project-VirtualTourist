@@ -3,7 +3,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
         <!--Virtual Tourist-->
@@ -80,17 +79,27 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="dvk-uY-qrW">
-                                <rect key="frame" x="0.0" y="198" width="600" height="402"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="oI7-Nl-cZA">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="z4R-xt-1YB">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="en7-AY-l9Y">
                                     <size key="itemSize" width="50" height="50"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="6QN-rl-l2n">
-                                        <rect key="frame" x="0.0" y="64" width="50" height="50"/>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="mapCell" id="5TH-gu-om6">
+                                        <rect key="frame" x="0.0" y="64" width="600" height="150"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="150"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <size key="customSize" width="600" height="150"/>
+                                    </collectionViewCell>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="photoCell" id="Nu1-Nq-o1O">
+                                        <rect key="frame" x="275" y="224" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
@@ -100,20 +109,13 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Ewa-VA-I6D">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="198"/>
-                            </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="dvk-uY-qrW" firstAttribute="centerX" secondItem="RFf-m2-HHK" secondAttribute="centerX" id="1Up-H5-Bro"/>
-                            <constraint firstItem="Ewa-VA-I6D" firstAttribute="top" secondItem="iFW-Sr-TcO" secondAttribute="bottom" constant="-64" id="6cC-ZZ-Nrz"/>
-                            <constraint firstItem="dvk-uY-qrW" firstAttribute="width" secondItem="RFf-m2-HHK" secondAttribute="width" id="CcU-n0-TfY"/>
-                            <constraint firstItem="apW-cH-L2m" firstAttribute="top" secondItem="dvk-uY-qrW" secondAttribute="bottom" id="GhR-wq-dBH"/>
-                            <constraint firstItem="Ewa-VA-I6D" firstAttribute="width" secondItem="RFf-m2-HHK" secondAttribute="width" id="V6i-Uj-EHx"/>
-                            <constraint firstItem="dvk-uY-qrW" firstAttribute="height" secondItem="RFf-m2-HHK" secondAttribute="height" multiplier="0.67" id="Ywd-Yf-IvN"/>
-                            <constraint firstItem="Ewa-VA-I6D" firstAttribute="height" secondItem="RFf-m2-HHK" secondAttribute="height" multiplier="0.33" id="bd8-2K-sK2"/>
-                            <constraint firstItem="Ewa-VA-I6D" firstAttribute="centerX" secondItem="RFf-m2-HHK" secondAttribute="centerX" id="kEu-f7-EaT"/>
+                            <constraint firstItem="z4R-xt-1YB" firstAttribute="height" secondItem="RFf-m2-HHK" secondAttribute="height" id="OHN-BY-8oi"/>
+                            <constraint firstItem="z4R-xt-1YB" firstAttribute="centerY" secondItem="RFf-m2-HHK" secondAttribute="centerY" id="Xc8-Av-AJT"/>
+                            <constraint firstItem="z4R-xt-1YB" firstAttribute="centerX" secondItem="RFf-m2-HHK" secondAttribute="centerX" id="qcS-ae-Nja"/>
+                            <constraint firstItem="z4R-xt-1YB" firstAttribute="width" secondItem="RFf-m2-HHK" secondAttribute="width" id="yhB-sP-VGm"/>
                         </constraints>
                     </view>
                 </viewController>
