@@ -58,6 +58,12 @@ extension MapViewController {
         infoLabel.sizeToFit()
         trashButton.enabled = false
     }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "pushPhotoAlbumView" {
+            
+        }
+    }
 }
 
 
@@ -202,44 +208,55 @@ extension MapViewController: MKMapViewDelegate {
     
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
         
+        let pinView = view as! VTMKPinAnnotationView
+        
         if isSelecting {
-            view.setSelected(false, animated: false)
-            
-            if let pinView = view as? VTMKPinAnnotationView {
                 
-                let pinAnnotation = pinView.annotation as! VTMKPointAnnotation
-                let predicate = NSPredicate(format: "id == %@", pinAnnotation.id)
+            let pinAnnotation = pinView.annotation as! VTMKPointAnnotation
+            let predicate = NSPredicate(format: "id == %@", pinAnnotation.id)
                 
-                fetchPinsWithPredicate(predicate) { results in
-                    guard let results = results else {
-                        return
-                    }
-                    
-                    guard let pin = results.first else {
-                        return
-                    }
-
-                    pin.isSelected = NSNumber(bool: !(Bool(pin.isSelected!)))
-                    
-                    pinAnnotation.isSelected = Bool(pin.isSelected!)
-                    pinView.pinTintColor = Bool(pin.isSelected!) ? MKPinAnnotationView.greenPinColor() : MKPinAnnotationView.redPinColor()
-                    
-                    self.pinsSelected += Bool(pin.isSelected!) ? 1 : -1
-                    
-                    if self.pinsSelected == 0 {
-                        self.infoLabel.text = "Tap pins to select"
-                        self.trashButton.enabled = false
-                    } else {
-                        let pinString = self.pinsSelected == 1 ? "pin" : "pins"
-                        self.infoLabel.text = "\(self.pinsSelected) \(pinString) selected"
-                        self.trashButton.enabled = true
-                    }
-                    
+            fetchPinsWithPredicate(predicate) { results in
+                guard let results = results else {
+                    return
                 }
+                
+                guard let pin = results.first else {
+                    return
+                }
+
+                pin.isSelected = NSNumber(bool: !(Bool(pin.isSelected!)))
+                
+                let isPinSelected = Bool(pin.isSelected!)
+                    
+                pinAnnotation.isSelected = isPinSelected
+                pinView.pinTintColor = isPinSelected ? MKPinAnnotationView.greenPinColor() : MKPinAnnotationView.redPinColor()
+                
+                self.configureToolbarWithIndicator(isPinSelected)
+            }
+        } else {
+            if pinView.dragged == false {
+                performSegueWithIdentifier("pushPhotoAlbumView", sender: self)
             }
         }
         
+        if pinView.dragged == true {
+            pinView.dragged = false
+        }
+        
         mapView.deselectAnnotation(view.annotation, animated: false)
+    }
+    
+    func configureToolbarWithIndicator(indicator: Bool) {
+        pinsSelected += Bool(indicator) ? 1 : -1
+        
+        if pinsSelected == 0 {
+            infoLabel.text = "Tap pins to select"
+            trashButton.enabled = false
+        } else {
+            let pinString = pinsSelected == 1 ? "pin" : "pins"
+            infoLabel.text = "\(pinsSelected) \(pinString) selected"
+            trashButton.enabled = true
+        }
     }
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, didChangeDragState newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
@@ -262,6 +279,9 @@ extension MapViewController: MKMapViewDelegate {
                     pin.latitude = NSNumber(double: pointAnnotation.coordinate.latitude)
                     pin.longitude = NSNumber(double: pointAnnotation.coordinate.longitude)
                     pin.dateUpdated = NSDate()
+                    
+                    let pinView = view as! VTMKPinAnnotationView
+                    pinView.dragged = true
                 }
              
             }
@@ -350,7 +370,6 @@ extension MapViewController {
         }
         
         enableDraggableForAnnotationView(true)
-
     }
     
 }

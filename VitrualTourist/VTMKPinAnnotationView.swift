@@ -11,6 +11,8 @@ import MapKit
 
 class VTMKPinAnnotationView: MKPinAnnotationView {
     
+    var dragged: Bool = false
+    
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         
         self.setSelected(true, animated: false)

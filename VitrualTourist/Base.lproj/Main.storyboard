@@ -94,18 +94,30 @@
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="150"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="hGs-hW-d8K">
+                                                    <rect key="frame" x="0.0" y="0.0" width="600" height="150"/>
+                                                </mapView>
+                                            </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <constraints>
+                                            <constraint firstItem="hGs-hW-d8K" firstAttribute="trailing" secondItem="5TH-gu-om6" secondAttribute="trailing" id="41i-lA-J3n"/>
+                                            <constraint firstItem="hGs-hW-d8K" firstAttribute="leading" secondItem="5TH-gu-om6" secondAttribute="leading" id="5qL-MX-XbY"/>
+                                            <constraint firstItem="hGs-hW-d8K" firstAttribute="bottom" secondItem="5TH-gu-om6" secondAttribute="bottom" id="afu-qR-4ge"/>
+                                            <constraint firstItem="hGs-hW-d8K" firstAttribute="top" secondItem="5TH-gu-om6" secondAttribute="top" id="tGp-HW-axp"/>
+                                        </constraints>
                                         <size key="customSize" width="600" height="150"/>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="photoCell" id="Nu1-Nq-o1O">
-                                        <rect key="frame" x="275" y="224" width="50" height="50"/>
+                                        <rect key="frame" x="218" y="224" width="164" height="156"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="164" height="156"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
+                                        <size key="customSize" width="164" height="156"/>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
