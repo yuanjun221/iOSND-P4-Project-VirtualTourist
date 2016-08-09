@@ -16,11 +16,13 @@ class PhotoAlbumViewController: CoreDataCollectionViewController {
 
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     
-    var pin: Pin!
-    
     lazy var coreDataStack: CoreDataStack = {
         return (UIApplication.sharedApplication().delegate as! AppDelegate).coreDataStack
     }()
+    
+    var pin: Pin!
+    
+    private let imageCache = NSCache()
 }
 
 
@@ -87,6 +89,8 @@ extension PhotoAlbumViewController {
         
         let photo = fetchedResultsController!.objectAtIndexPath(indexPath) as! Photo
         
+        cell.urlString = photo.imageURL!
+        
         populateImage(WithPhoto: photo, ForCell: cell)
 
         return cell
@@ -125,6 +129,12 @@ extension PhotoAlbumViewController {
 extension PhotoAlbumViewController {
     
     func populateImage(WithPhoto photo: Photo, ForCell cell: VTCollectionViewCell) {
+        
+        if let imageFromCache = imageCache.objectForKey(photo.imageURL!) as? UIImage {
+            cell.imageView.image = imageFromCache
+            return
+        }
+        
         if let imageData = photo.imageData {
             
             guard let image = UIImage(data: imageData) else {
@@ -132,7 +142,7 @@ extension PhotoAlbumViewController {
                 return
             }
             
-            cell.imageView.image = image
+            setImage(image, WithPhoto: photo, ForCell: cell)
             
         } else {
             downloadImageDataForPhoto(photo) {
@@ -148,9 +158,19 @@ extension PhotoAlbumViewController {
                 }
                 
                 performUIUpdatesOnMain() {
-                    cell.imageView.image = image
+                    self.setImage(image, WithPhoto: photo, ForCell: cell)
                 }
             }
         }
     }
+    
+    func setImage(image: UIImage, WithPhoto photo: Photo, ForCell cell: VTCollectionViewCell) {
+        if cell.urlString == photo.imageURL! {
+            cell.imageView.image = image
+        }
+        
+        imageCache.setObject(image, forKey: photo.imageURL!)
+    }
+    
+    
 }

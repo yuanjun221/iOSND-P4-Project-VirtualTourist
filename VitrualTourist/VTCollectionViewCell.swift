@@ -10,5 +10,7 @@ import UIKit
 
 class VTCollectionViewCell: UICollectionViewCell {
     
+    var urlString: String!
+    
     @IBOutlet weak var imageView: UIImageView!
 }
