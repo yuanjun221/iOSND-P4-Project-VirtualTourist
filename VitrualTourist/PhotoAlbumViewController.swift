@@ -10,6 +10,8 @@ import UIKit
 import MapKit
 import CoreData
 
+
+// MARK: - Properties
 class PhotoAlbumViewController: CoreDataCollectionViewController {
 
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
@@ -22,6 +24,7 @@ class PhotoAlbumViewController: CoreDataCollectionViewController {
 }
 
 
+// MARK: - View Life Cycle
 extension PhotoAlbumViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -101,21 +104,24 @@ extension PhotoAlbumViewController {
     }
     
     func setMapViewAnnotation(ForMapView mapView: MKMapView) {
-        let annotation = MKPointAnnotation()
-        let coordinate = CLLocationCoordinate2D(latitude: Double(pin.latitude!), longitude: Double(pin.longitude!))
-        annotation.coordinate = coordinate
-        mapView.addAnnotation(annotation)
-        mapView.setCenterCoordinate(coordinate, animated: false)
         
-        let region = CLCircularRegion(center: coordinate, radius: 5000, identifier: "Town")
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(coordinate, region.radius * 2, region.radius * 2)
-        mapView.regionThatFits(coordinateRegion)
-        mapView.setRegion(coordinateRegion, animated: false)
+        if mapView.annotations.isEmpty {
+            let annotation = MKPointAnnotation()
+            let coordinate = CLLocationCoordinate2D(latitude: Double(pin.latitude!), longitude: Double(pin.longitude!))
+            annotation.coordinate = coordinate
+            mapView.addAnnotation(annotation)
+            mapView.setCenterCoordinate(coordinate, animated: false)
+            
+            let region = CLCircularRegion(center: coordinate, radius: 5000, identifier: "Town")
+            let coordinateRegion = MKCoordinateRegionMakeWithDistance(coordinate, region.radius * 2, region.radius * 2)
+            mapView.regionThatFits(coordinateRegion)
+            mapView.setRegion(coordinateRegion, animated: false)
+        }
     }
 }
 
 
-// MARK: -
+// MARK: - Image Fetching
 extension PhotoAlbumViewController {
     
     func populateImage(WithPhoto photo: Photo, ForCell cell: VTCollectionViewCell) {
