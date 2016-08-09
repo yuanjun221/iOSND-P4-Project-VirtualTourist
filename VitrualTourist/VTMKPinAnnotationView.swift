@@ -19,12 +19,9 @@ class VTMKPinAnnotationView: MKPinAnnotationView {
         super.touchesBegan(touches, withEvent: event)
     }
     
-    
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         
         self.setSelected(false, animated: false)
         super.touchesEnded(touches, withEvent: event)
     }
-    
-
 }

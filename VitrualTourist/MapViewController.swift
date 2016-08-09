@@ -22,12 +22,13 @@ class MapViewController: UIViewController {
     lazy var coreDataStack: CoreDataStack = {
         return (UIApplication.sharedApplication().delegate as! AppDelegate).coreDataStack
     }()
+    
     lazy var pins = [Pin]()
     
     private var infoLabel = UILabel(frame: CGRectZero)
     private var isSelecting: Bool = false
     private var pinsSelected: Int = 0
-    
+    private var pinToBeDelivered: Pin!
 }
 
 
@@ -62,6 +63,22 @@ extension MapViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "pushPhotoAlbumView" {
             
+            if let photoAlbumViewController = segue.destinationViewController as? PhotoAlbumViewController {
+                
+                let fetchRequest = NSFetchRequest(entityName: "Photo")
+                
+                let predicate = NSPredicate(format: "pin == %@", pinToBeDelivered)
+                fetchRequest.predicate = predicate
+                
+                let sortDescriptor = NSSortDescriptor(key: "owner",ascending: true)
+                fetchRequest.sortDescriptors = [sortDescriptor]
+                
+                let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: coreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
+                
+                photoAlbumViewController.fetchedResultsController = fetchedResultsController
+                
+                photoAlbumViewController.pin = pinToBeDelivered
+            }
         }
     }
 }
@@ -76,7 +93,7 @@ extension MapViewController {
             let coordinate = self.mapView.convertPoint(point, toCoordinateFromView: mapView)
             let id = NSUUID().UUIDString
             
-            let _ = Pin(context:coreDataStack.context, id: id, latitude: coordinate.latitude, longitude: coordinate.longitude)
+            let pin = Pin(context:coreDataStack.context, id: id, latitude: coordinate.latitude, longitude: coordinate.longitude)
             
             let annotaion = VTMKPointAnnotation()
             annotaion.coordinate = coordinate
@@ -87,9 +104,21 @@ extension MapViewController {
             if selectButton.enabled == false {
                 selectButton.enabled = true
             }
+            
+            downloadPhotosModelBackground(ForPin: pin)
         }
     }
     
+    func downloadPhotosModelBackground(ForPin pin: Pin) {
+        coreDataStack.performBackgroundBatchOperation { workerContext in
+            self.getPhotosModelWithPin(self.coreDataStack.context, pin: pin) {
+                for photo in pin.photos! {
+                    let photo = photo as! Photo
+                    self.downloadImageDataForPhoto(photo, completionHandler: nil)
+                }
+            }
+        }
+    }
 }
 
 
@@ -106,33 +135,15 @@ extension MapViewController {
         }
         
         if isSelecting {
-            
             enableDraggableForAnnotationView(false)
-            
             fetchExistedPins()
-  
         } else {
-            
             enableDraggableForAnnotationView(true)
-            
             setPinsDeselected()
-            
-            for annotation in mapView.annotations {
-                let annotaionView = mapView.viewForAnnotation(annotation) as! MKPinAnnotationView
-                let pinAnnotation = annotaionView.annotation as! VTMKPointAnnotation
-                
-                if pinAnnotation.isSelected {
-                    annotaionView.pinTintColor = MKPinAnnotationView.redPinColor()
-                    pinAnnotation.isSelected = false
-                }
-            }
-            
+            setPinAnnotationsDeselected()
+            resetToolbar()
             pinsSelected = 0
-            infoLabel.text = "Tap pins to select"
-            trashButton.enabled = false
         }
-        
-        
     }
     
     @IBAction func trashButtonPressed(sender: AnyObject) {
@@ -165,9 +176,8 @@ extension MapViewController {
         UIView.animateWithDuration(0.25) {
             self.navigationController?.toolbarHidden = true
         }
+        resetToolbar()
         pinsSelected = 0
-        infoLabel.text = "Tap pins to select"
-        trashButton.enabled = false
     }
     
     func enableDraggableForAnnotationView(enabled: Bool) {
@@ -180,6 +190,24 @@ extension MapViewController {
                 annotationView.draggable = enabled
             }
         }
+    }
+    
+    func setPinAnnotationsDeselected() {
+        for annotation in mapView.annotations {
+            if let annotaionView = mapView.viewForAnnotation(annotation) as? MKPinAnnotationView {
+                let pinAnnotation = annotaionView.annotation as! VTMKPointAnnotation
+                
+                if pinAnnotation.isSelected {
+                    annotaionView.pinTintColor = MKPinAnnotationView.redPinColor()
+                    pinAnnotation.isSelected = false
+                }
+            }
+        }
+    }
+    
+    func resetToolbar() {
+        infoLabel.text = "Tap pins to select"
+        trashButton.enabled = false
     }
 }
 
@@ -209,38 +237,35 @@ extension MapViewController: MKMapViewDelegate {
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
         
         let pinView = view as! VTMKPinAnnotationView
+        let pinAnnotation = pinView.annotation as! VTMKPointAnnotation
+        let predicate = NSPredicate(format: "id == %@", pinAnnotation.id)
         
-        if isSelecting {
-                
-            let pinAnnotation = pinView.annotation as! VTMKPointAnnotation
-            let predicate = NSPredicate(format: "id == %@", pinAnnotation.id)
-                
-            fetchPinsWithPredicate(predicate) { results in
-                guard let results = results else {
-                    return
-                }
-                
-                guard let pin = results.first else {
-                    return
-                }
-
+        fetchPinsWithPredicate(predicate) { results in
+            guard let results = results else {
+                return
+            }
+            
+            guard let pin = results.first else {
+                return
+            }
+            
+            if self.isSelecting {
                 pin.isSelected = NSNumber(bool: !(Bool(pin.isSelected!)))
                 
                 let isPinSelected = Bool(pin.isSelected!)
-                    
                 pinAnnotation.isSelected = isPinSelected
                 pinView.pinTintColor = isPinSelected ? MKPinAnnotationView.greenPinColor() : MKPinAnnotationView.redPinColor()
                 
                 self.configureToolbarWithIndicator(isPinSelected)
+                
+            } else {
+                if pinView.dragged == false {
+                    self.pinToBeDelivered = pin
+                    self.performSegueWithIdentifier("pushPhotoAlbumView", sender: self)
+                } else {
+                    pinView.dragged = false
+                }
             }
-        } else {
-            if pinView.dragged == false {
-                performSegueWithIdentifier("pushPhotoAlbumView", sender: self)
-            }
-        }
-        
-        if pinView.dragged == true {
-            pinView.dragged = false
         }
         
         mapView.deselectAnnotation(view.annotation, animated: false)
@@ -250,8 +275,7 @@ extension MapViewController: MKMapViewDelegate {
         pinsSelected += Bool(indicator) ? 1 : -1
         
         if pinsSelected == 0 {
-            infoLabel.text = "Tap pins to select"
-            trashButton.enabled = false
+            resetToolbar()
         } else {
             let pinString = pinsSelected == 1 ? "pin" : "pins"
             infoLabel.text = "\(pinsSelected) \(pinString) selected"
@@ -267,6 +291,7 @@ extension MapViewController: MKMapViewDelegate {
                 let pointAnnotation = view.annotation as! VTMKPointAnnotation
                 
                 let predicate = NSPredicate(format: "id == %@", pointAnnotation.id)
+                
                 fetchPinsWithPredicate(predicate) { results in
                     guard let results = results else {
                         return
@@ -276,21 +301,18 @@ extension MapViewController: MKMapViewDelegate {
                         return
                     }
                     
-                    pin.latitude = NSNumber(double: pointAnnotation.coordinate.latitude)
-                    pin.longitude = NSNumber(double: pointAnnotation.coordinate.longitude)
-                    pin.dateUpdated = NSDate()
+                    self.coreDataStack.context.deleteObject(pin)
+                    let newPin = Pin(context: self.coreDataStack.context, id: pointAnnotation.id, latitude: pointAnnotation.coordinate.latitude, longitude: pointAnnotation.coordinate.longitude)
                     
-                    let pinView = view as! VTMKPinAnnotationView
-                    pinView.dragged = true
+                    self.downloadPhotosModelBackground(ForPin: newPin)
                 }
-             
             }
         }
     }
-    
 }
 
 
+// MARK: - Data Model Manipulating
 extension MapViewController {
     
     func fetchExistedPins() {
@@ -301,7 +323,6 @@ extension MapViewController {
         } catch let error as NSError {
             print("Could not fetch \(error), \(error.userInfo)")
         }
-        
     }
     
     func dropExistedPins() {
@@ -345,7 +366,6 @@ extension MapViewController {
                 pin.isSelected = false
             }
         }
-
     }
     
     func deleteSelectedPins() {
@@ -359,7 +379,6 @@ extension MapViewController {
             for pin in results {
                 self.coreDataStack.context.deleteObject(pin)
             }
-            
         }
         
         for annotation in mapView.annotations {
@@ -371,5 +390,4 @@ extension MapViewController {
         
         enableDraggableForAnnotationView(true)
     }
-    
 }

@@ -13,5 +13,4 @@ class VTMKPointAnnotation: MKPointAnnotation {
     var id: String!
     var isSelected: Bool = false
     var draggable: Bool = true
-    
 }

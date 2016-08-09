@@ -7,16 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BF206FB31D5323D8001B4BC9 /* VTCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF206FB21D5323D8001B4BC9 /* VTCollectionViewCell.swift */; };
+		BF206FB51D533489001B4BC9 /* VTCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF206FB41D533489001B4BC9 /* VTCollectionReusableView.swift */; };
+		BF206FD61D546E99001B4BC9 /* VTClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF206FD51D546E99001B4BC9 /* VTClient.swift */; };
+		BF206FD81D546F43001B4BC9 /* VTConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF206FD71D546F43001B4BC9 /* VTConstants.swift */; };
+		BF206FDA1D548A72001B4BC9 /* VTConvenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF206FD91D548A72001B4BC9 /* VTConvenience.swift */; };
 		BF33B8B61D4C7CEE00DE432D /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF33B8B51D4C7CEE00DE432D /* CoreDataStack.swift */; };
 		BF33B8B91D4C7E5E00DE432D /* VirtualTourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = BF33B8B71D4C7E5E00DE432D /* VirtualTourist.xcdatamodeld */; };
 		BF33B8BB1D4D9DB100DE432D /* GCDBlackBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF33B8BA1D4D9DB100DE432D /* GCDBlackBox.swift */; };
-		BF33B8C01D4F0B7000DE432D /* Pin+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF33B8BC1D4F0B7000DE432D /* Pin+CoreDataProperties.swift */; };
 		BF33B8C11D4F0B7000DE432D /* Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF33B8BD1D4F0B7000DE432D /* Pin.swift */; };
 		BF33B8C21D4F0B7000DE432D /* Photo+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF33B8BE1D4F0B7000DE432D /* Photo+CoreDataProperties.swift */; };
 		BF33B8C31D4F0B7000DE432D /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF33B8BF1D4F0B7000DE432D /* Photo.swift */; };
 		BF33B8C71D4F765A00DE432D /* VTMKPointAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF33B8C61D4F765A00DE432D /* VTMKPointAnnotation.swift */; };
 		BF33B8CA1D50758000DE432D /* VTMKPinAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF33B8C91D50758000DE432D /* VTMKPinAnnotationView.swift */; };
 		BF4849541D4C5F6000694CFE /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF4849531D4C5F6000694CFE /* MapKit.framework */; };
+		BFA2463C1D573C7200BD6020 /* NetworkRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2463B1D573C7200BD6020 /* NetworkRequests.swift */; };
+		BFA2463E1D58225100BD6020 /* Pin+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2463D1D58225100BD6020 /* Pin+CoreDataProperties.swift */; };
+		BFA246421D586ED100BD6020 /* CoreDataCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA246411D586ED100BD6020 /* CoreDataCollectionViewController.swift */; };
 		BFC0C51D1D4B63DB00631AB7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC0C51C1D4B63DB00631AB7 /* AppDelegate.swift */; };
 		BFC0C51F1D4B63DB00631AB7 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC0C51E1D4B63DB00631AB7 /* MapViewController.swift */; };
 		BFC0C5221D4B63DB00631AB7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BFC0C5201D4B63DB00631AB7 /* Main.storyboard */; };
@@ -26,16 +33,23 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BF206FB21D5323D8001B4BC9 /* VTCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VTCollectionViewCell.swift; sourceTree = "<group>"; };
+		BF206FB41D533489001B4BC9 /* VTCollectionReusableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VTCollectionReusableView.swift; sourceTree = "<group>"; };
+		BF206FD51D546E99001B4BC9 /* VTClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VTClient.swift; sourceTree = "<group>"; };
+		BF206FD71D546F43001B4BC9 /* VTConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VTConstants.swift; sourceTree = "<group>"; };
+		BF206FD91D548A72001B4BC9 /* VTConvenience.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VTConvenience.swift; sourceTree = "<group>"; };
 		BF33B8B51D4C7CEE00DE432D /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		BF33B8B81D4C7E5E00DE432D /* VirtualTourist.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = VirtualTourist.xcdatamodel; sourceTree = "<group>"; };
 		BF33B8BA1D4D9DB100DE432D /* GCDBlackBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GCDBlackBox.swift; sourceTree = "<group>"; };
-		BF33B8BC1D4F0B7000DE432D /* Pin+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Pin+CoreDataProperties.swift"; path = "../Pin+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		BF33B8BD1D4F0B7000DE432D /* Pin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Pin.swift; path = ../Pin.swift; sourceTree = "<group>"; };
 		BF33B8BE1D4F0B7000DE432D /* Photo+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Photo+CoreDataProperties.swift"; path = "../Photo+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		BF33B8BF1D4F0B7000DE432D /* Photo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Photo.swift; path = ../Photo.swift; sourceTree = "<group>"; };
 		BF33B8C61D4F765A00DE432D /* VTMKPointAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VTMKPointAnnotation.swift; sourceTree = "<group>"; };
 		BF33B8C91D50758000DE432D /* VTMKPinAnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VTMKPinAnnotationView.swift; sourceTree = "<group>"; };
 		BF4849531D4C5F6000694CFE /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		BFA2463B1D573C7200BD6020 /* NetworkRequests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkRequests.swift; sourceTree = "<group>"; };
+		BFA2463D1D58225100BD6020 /* Pin+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Pin+CoreDataProperties.swift"; path = "../Pin+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		BFA246411D586ED100BD6020 /* CoreDataCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataCollectionViewController.swift; sourceTree = "<group>"; };
 		BFC0C5191D4B63DB00631AB7 /* VitrualTourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VitrualTourist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFC0C51C1D4B63DB00631AB7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BFC0C51E1D4B63DB00631AB7 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -58,10 +72,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BF206FD41D546DBC001B4BC9 /* Client */ = {
+			isa = PBXGroup;
+			children = (
+				BF206FD71D546F43001B4BC9 /* VTConstants.swift */,
+				BF206FD51D546E99001B4BC9 /* VTClient.swift */,
+				BF206FD91D548A72001B4BC9 /* VTConvenience.swift */,
+			);
+			name = Client;
+			sourceTree = "<group>";
+		};
 		BF33B8C41D4F26A200DE432D /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				BF33B8BC1D4F0B7000DE432D /* Pin+CoreDataProperties.swift */,
+				BFA2463D1D58225100BD6020 /* Pin+CoreDataProperties.swift */,
 				BF33B8BD1D4F0B7000DE432D /* Pin.swift */,
 				BF33B8BE1D4F0B7000DE432D /* Photo+CoreDataProperties.swift */,
 				BF33B8BF1D4F0B7000DE432D /* Photo.swift */,
@@ -74,7 +98,9 @@
 			isa = PBXGroup;
 			children = (
 				BFC0C51E1D4B63DB00631AB7 /* MapViewController.swift */,
+				BFA246411D586ED100BD6020 /* CoreDataCollectionViewController.swift */,
 				BFF0FCA41D50A2AF00A1E46E /* PhotoAlbumViewController.swift */,
+				BFA2463B1D573C7200BD6020 /* NetworkRequests.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -84,6 +110,8 @@
 			children = (
 				BF33B8C61D4F765A00DE432D /* VTMKPointAnnotation.swift */,
 				BF33B8C91D50758000DE432D /* VTMKPinAnnotationView.swift */,
+				BF206FB21D5323D8001B4BC9 /* VTCollectionViewCell.swift */,
+				BF206FB41D533489001B4BC9 /* VTCollectionReusableView.swift */,
 			);
 			name = SubView;
 			sourceTree = "<group>";
@@ -108,6 +136,7 @@
 		BFC0C51B1D4B63DB00631AB7 /* VitrualTourist */ = {
 			isa = PBXGroup;
 			children = (
+				BF206FD41D546DBC001B4BC9 /* Client */,
 				BF33B8C41D4F26A200DE432D /* Model */,
 				BF33B8C51D4F26BF00DE432D /* ViewController */,
 				BF33B8C81D50754400DE432D /* SubView */,
@@ -200,16 +229,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				BF33B8C11D4F0B7000DE432D /* Pin.swift in Sources */,
+				BF206FB51D533489001B4BC9 /* VTCollectionReusableView.swift in Sources */,
 				BF33B8B61D4C7CEE00DE432D /* CoreDataStack.swift in Sources */,
-				BF33B8C01D4F0B7000DE432D /* Pin+CoreDataProperties.swift in Sources */,
+				BF206FD81D546F43001B4BC9 /* VTConstants.swift in Sources */,
+				BF206FD61D546E99001B4BC9 /* VTClient.swift in Sources */,
 				BF33B8C71D4F765A00DE432D /* VTMKPointAnnotation.swift in Sources */,
 				BF33B8CA1D50758000DE432D /* VTMKPinAnnotationView.swift in Sources */,
 				BF33B8C31D4F0B7000DE432D /* Photo.swift in Sources */,
 				BFC0C51F1D4B63DB00631AB7 /* MapViewController.swift in Sources */,
+				BF206FB31D5323D8001B4BC9 /* VTCollectionViewCell.swift in Sources */,
+				BFA2463E1D58225100BD6020 /* Pin+CoreDataProperties.swift in Sources */,
+				BFA2463C1D573C7200BD6020 /* NetworkRequests.swift in Sources */,
+				BFA246421D586ED100BD6020 /* CoreDataCollectionViewController.swift in Sources */,
 				BFF0FCA51D50A2AF00A1E46E /* PhotoAlbumViewController.swift in Sources */,
 				BFC0C51D1D4B63DB00631AB7 /* AppDelegate.swift in Sources */,
 				BF33B8B91D4C7E5E00DE432D /* VirtualTourist.xcdatamodeld in Sources */,
 				BF33B8C21D4F0B7000DE432D /* Photo+CoreDataProperties.swift in Sources */,
+				BF206FDA1D548A72001B4BC9 /* VTConvenience.swift in Sources */,
 				BF33B8BB1D4D9DB100DE432D /* GCDBlackBox.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
