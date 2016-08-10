@@ -72,11 +72,6 @@ struct CoreDataStack {
         }catch{
             print("unable to add store at \(dbURL)")
         }
-        
-        
-        
-        
-        
     }
     
     // MARK:  - Utils
@@ -105,13 +100,14 @@ extension CoreDataStack  {
     }
 }
 
+
 // MARK:  - Batch processing in the background
 extension CoreDataStack{
-    typealias Batch=(workerContext: NSManagedObjectContext) -> ()
+    typealias Batch = (workerContext: NSManagedObjectContext) -> ()
     
-    func performBackgroundBatchOperation(batch: Batch){
+    func performBackgroundBatchOperation(batch: Batch) {
         
-        backgroundContext.performBlock(){
+        backgroundContext.performBlock() {
             batch(workerContext: self.backgroundContext)
             
             // Save it to the parent context, so normal saving
@@ -124,6 +120,8 @@ extension CoreDataStack{
         }
     }
 }
+
+
 // MARK:  - Save
 extension CoreDataStack {
     

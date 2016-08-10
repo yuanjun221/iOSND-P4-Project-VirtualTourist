@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 
+
 // MARK: - Request Method Convenience
 extension VTClient {
     
@@ -70,7 +71,7 @@ extension VTClient {
             }
             
             if pages == 0 {
-                completionHandlerForRandomPage(result: nil, error: NSError(domain: errorDomain, code: 0, userInfo: [NSLocalizedDescriptionKey: "Pages number is 0. No photo returned."]))
+                completionHandlerForRandomPage(result: nil, error: NSError(domain: errorDomain, code: -3000, userInfo: [NSLocalizedDescriptionKey: "Pages number is 0. No photo returned with current location."]))
                 return
             }
             

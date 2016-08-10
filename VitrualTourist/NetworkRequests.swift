@@ -18,8 +18,15 @@ extension UIViewController {
             
             guard error == nil else {
                 print(error?.localizedDescription)
+                
+                if error!.code == -3000 {
+                    pin.noPhoto = true
+                }
+                
                 return
             }
+            
+            pin.noPhoto = false
             
             if let completionHandler = completionHandler {
                 completionHandler()

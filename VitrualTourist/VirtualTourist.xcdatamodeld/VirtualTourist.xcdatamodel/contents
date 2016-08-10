@@ -13,10 +13,11 @@
         <attribute name="latitude" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="locationName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="longitude" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="noPhoto" optional="YES" attributeType="Boolean" syncable="YES"/>
         <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Photo" inverseName="pin" inverseEntity="Photo" syncable="YES"/>
     </entity>
     <elements>
         <element name="Photo" positionX="142" positionY="39" width="128" height="120"/>
-        <element name="Pin" positionX="-63" positionY="-21" width="128" height="135"/>
+        <element name="Pin" positionX="-63" positionY="-21" width="128" height="150"/>
     </elements>
 </model>

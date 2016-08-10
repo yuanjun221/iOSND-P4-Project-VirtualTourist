@@ -20,7 +20,7 @@ class PhotoAlbumViewController: CoreDataCollectionViewController {
         return (UIApplication.sharedApplication().delegate as! AppDelegate).coreDataStack
     }()
     
-    var pin: Pin!
+    
     
     private let imageCache = NSCache()
 }
@@ -30,7 +30,6 @@ class PhotoAlbumViewController: CoreDataCollectionViewController {
 extension PhotoAlbumViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView?.showsVerticalScrollIndicator = false
     }
     
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
@@ -84,10 +83,9 @@ extension PhotoAlbumViewController: UICollectionViewDelegateFlowLayout{
 extension PhotoAlbumViewController {
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("photoCell", forIndexPath: indexPath) as! VTCollectionViewCell
         
-        let photo = fetchedResultsController!.objectAtIndexPath(indexPath) as! Photo
+        let photo = fetchedResultsControllerForPhotos!.objectAtIndexPath(indexPath) as! Photo
         
         cell.urlString = photo.imageURL!
         
@@ -108,7 +106,6 @@ extension PhotoAlbumViewController {
     }
     
     func setMapViewAnnotation(ForMapView mapView: MKMapView) {
-        
         if mapView.annotations.isEmpty {
             let annotation = MKPointAnnotation()
             let coordinate = CLLocationCoordinate2D(latitude: Double(pin.latitude!), longitude: Double(pin.longitude!))
@@ -171,6 +168,4 @@ extension PhotoAlbumViewController {
         
         imageCache.setObject(image, forKey: photo.imageURL!)
     }
-    
-    
 }

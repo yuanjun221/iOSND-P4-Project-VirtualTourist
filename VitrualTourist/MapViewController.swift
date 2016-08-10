@@ -65,21 +65,28 @@ extension MapViewController {
             
             if let photoAlbumViewController = segue.destinationViewController as? PhotoAlbumViewController {
                 
-                let fetchRequest = NSFetchRequest(entityName: "Photo")
+                let predicateForPhotos = NSPredicate(format: "pin == %@", pinToBeDelivered)
+                let sortDescriptorForPhotos = NSSortDescriptor(key: "owner", ascending: true)
+                let fetchedResultsControllerForPhotos = fetchedResultsController(entityName: "Photo", predicate: predicateForPhotos, sortDescriptors: [sortDescriptorForPhotos])
+                photoAlbumViewController.fetchedResultsControllerForPhotos = fetchedResultsControllerForPhotos
                 
-                let predicate = NSPredicate(format: "pin == %@", pinToBeDelivered)
-                fetchRequest.predicate = predicate
-                
-                let sortDescriptor = NSSortDescriptor(key: "owner",ascending: true)
-                fetchRequest.sortDescriptors = [sortDescriptor]
-                
-                let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: coreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
-                
-                photoAlbumViewController.fetchedResultsController = fetchedResultsController
+
+                let predicateForPin = NSPredicate(format: "id == %@", pinToBeDelivered.id!)
+                let sortDescriptorForPin = NSSortDescriptor(key: "id", ascending: true)
+                let fetchedResultsControllerForPin = fetchedResultsController(entityName: "Pin", predicate: predicateForPin, sortDescriptors: [sortDescriptorForPin])
+                photoAlbumViewController.fetchedResultsControllerForPin = fetchedResultsControllerForPin
                 
                 photoAlbumViewController.pin = pinToBeDelivered
             }
         }
+    }
+    
+    private func fetchedResultsController(entityName entityName: String, predicate: NSPredicate, sortDescriptors: [NSSortDescriptor]) -> NSFetchedResultsController {
+        let fetchRequest = NSFetchRequest(entityName: entityName)
+        fetchRequest.predicate = predicate
+        fetchRequest.sortDescriptors = sortDescriptors
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: coreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
+        return fetchedResultsController
     }
 }
 
@@ -147,7 +154,6 @@ extension MapViewController {
     }
     
     @IBAction func trashButtonPressed(sender: AnyObject) {
-        
         let pinString = pinsSelected == 1 ? "This pin" : "These pins"
         let alertTitle = "\(pinString) will be removed from the map."
         
@@ -254,7 +260,7 @@ extension MapViewController: MKMapViewDelegate {
                 
                 let isPinSelected = Bool(pin.isSelected!)
                 pinAnnotation.isSelected = isPinSelected
-                pinView.pinTintColor = isPinSelected ? MKPinAnnotationView.greenPinColor() : MKPinAnnotationView.redPinColor()
+                pinView.pinTintColor = isPinSelected ? UIColor.lightGrayColor() : MKPinAnnotationView.redPinColor()
                 
                 self.configureToolbarWithIndicator(isPinSelected)
                 

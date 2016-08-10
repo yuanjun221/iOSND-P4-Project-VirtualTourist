@@ -12,32 +12,71 @@ import CoreData
 // MARK: - Properties
 class CoreDataCollectionViewController: UICollectionViewController {
     
-    var fetchedResultsController: NSFetchedResultsController? {
+    var fetchedResultsControllerForPhotos: NSFetchedResultsController? {
         didSet {
-            fetchedResultsController?.delegate = self
-            executeSearch()
-            collectionView?.reloadData()
+            fetchedResultsControllerForPhotos?.delegate = self
+            executeSearchPhotos()
         }
     }
     
-    private var blockOperations = [NSBlockOperation]()
-    
-    /*
-    init(fetchedResultsController fc: NSFetchedResultsController, layout: UICollectionViewLayout) {
-        fetchedResultsController = fc
-        super.init(collectionViewLayout: layout)
+    var fetchedResultsControllerForPin: NSFetchedResultsController? {
+        didSet {
+            fetchedResultsControllerForPin?.delegate = self
+            executeSearchPin()
+        }
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    */
+    var pin: Pin!
+    
+    private var blockOperationsForCollectionView: [NSBlockOperation]!
+    private var activityIndicator: UIActivityIndicatorView!
+    private var label: UILabel!
+}
 
+
+extension CoreDataCollectionViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        collectionView?.alwaysBounceVertical = true
+        collectionView?.showsVerticalScrollIndicator = false
+        
+        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        activityIndicator.frame = CGRectMake((view.frame.width - 20) / 2, (view.frame.width * 0.6) + 20, 20, 20)
+        collectionView!.addSubview(activityIndicator)
+        
+        label = UILabel()
+        label.frame = CGRectMake(0, (view.frame.width * 0.6) + 20, view.frame.width, 20)
+        label.textAlignment = .Center
+        label.textColor = UIColor.grayColor()
+        label.text = "No photos were found."
+        label.alpha = 0
+        collectionView?.addSubview(label)
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+
+        if let noPhoto = pin.noPhoto {
+            if activityIndicator.isAnimating() {
+                activityIndicator.stopAnimating()
+            }
+            
+            if Bool(noPhoto) {
+                UIView.animateWithDuration(0.25) {
+                    self.label.alpha = 1
+                }
+            }
+        } else {
+            activityIndicator.startAnimating()
+        }
+    }
 }
 
 
 // MARK: - Subclass responsability
 extension CoreDataCollectionViewController {
+    
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
         fatalError("This method MUST be implemented by a subclass of CoreDataTableViewController")
@@ -47,18 +86,11 @@ extension CoreDataCollectionViewController {
 
 // MARK: - Collection View Data Source
 extension CoreDataCollectionViewController {
-    override func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        if let fetchedResultsController = fetchedResultsController {
-            return (fetchedResultsController.sections?.count)!
-        } else {
-            return 0
-        }
-    }
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let fetchedResultsController = fetchedResultsController{
+        if let fetchedResultsController = fetchedResultsControllerForPhotos {
             return fetchedResultsController.sections![section].numberOfObjects;
-        }else{
+        } else {
             return 0
         }
     }
@@ -68,12 +100,22 @@ extension CoreDataCollectionViewController {
 // MARK: - Fetches
 extension CoreDataCollectionViewController {
     
-    func executeSearch(){
-        if let fc = fetchedResultsController{
-            do{
+    func executeSearchPhotos(){
+        if let fc = fetchedResultsControllerForPhotos {
+            do {
                 try fc.performFetch()
-            }catch let e as NSError{
-                print("Error while trying to perform a search: \n\(e)\n\(fetchedResultsController)")
+            } catch let error as NSError {
+                print("Error while trying to perform a search: " + error.localizedDescription)
+            }
+        }
+    }
+    
+    func executeSearchPin() {
+        if let fc = fetchedResultsControllerForPin {
+            do {
+                try fc.performFetch()
+            } catch let error as NSError {
+                print("Error while trying to perform a search: " + error.localizedDescription)
             }
         }
     }
@@ -83,26 +125,56 @@ extension CoreDataCollectionViewController {
 // MARK: - Fetched Results Controller Delegate
 extension CoreDataCollectionViewController: NSFetchedResultsControllerDelegate {
     
-    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-        switch type {
-        case .Insert:
-            blockOperations.append(NSBlockOperation(block: {
-                self.collectionView?.insertItemsAtIndexPaths([newIndexPath!])
-            }))
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+
+        collectionView?.performBatchUpdates({
+            if self.activityIndicator.isAnimating() {
+                self.activityIndicator.stopAnimating()
+            }
+            }, completion: nil)
+        
+        if controller == fetchedResultsControllerForPhotos {
+            blockOperationsForCollectionView = []
+        }
+        
+        if controller == fetchedResultsControllerForPin {
             
-        default:
-            break
+            if let noPhoto = pin.noPhoto {
+                if Bool(noPhoto) {
+                    collectionView?.performBatchUpdates({
+                        UIView.animateWithDuration(0.25) {
+                            self.label.alpha = 1
+                        }
+                        }, completion: nil)
+                }
+            }
+        }
+    }
+    
+    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        
+        if controller == fetchedResultsControllerForPhotos {
+            switch type {
+            case .Insert:
+                blockOperationsForCollectionView.append(NSBlockOperation(block: {
+                    self.collectionView?.insertItemsAtIndexPaths([newIndexPath!])
+                }))
+                
+            default:
+                break
+            }
         }
     }
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
-        collectionView?.performBatchUpdates({
-            
-            for operation in self.blockOperations {
-                operation.start()
-            }
-            
-            }, completion: nil)
+        
+        if controller == fetchedResultsControllerForPhotos {
+            collectionView?.performBatchUpdates({
+                for operation in self.blockOperationsForCollectionView {
+                    operation.start()
+                }
+                
+                }, completion: nil)
+        }
     }
-
 }
