@@ -20,6 +20,7 @@ class Pin: NSManagedObject {
             self.id = id
             self.locationName = locationName
             self.isSelected = false
+            self.fetchPhotosTimedOut = false
         } else {
             fatalError("Unable to find Entity name 'Pin'!")
         }

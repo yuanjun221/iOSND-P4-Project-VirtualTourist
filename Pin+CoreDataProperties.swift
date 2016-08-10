@@ -20,6 +20,7 @@ extension Pin {
     @NSManaged var locationName: String?
     @NSManaged var longitude: NSNumber?
     @NSManaged var noPhoto: NSNumber?
+    @NSManaged var fetchPhotosTimedOut: NSNumber?
     
     @NSManaged var photos: NSOrderedSet?
 

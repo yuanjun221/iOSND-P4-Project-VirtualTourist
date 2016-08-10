@@ -85,6 +85,7 @@
 		BF33B8C41D4F26A200DE432D /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				BF33B8B51D4C7CEE00DE432D /* CoreDataStack.swift */,
 				BFA2463D1D58225100BD6020 /* Pin+CoreDataProperties.swift */,
 				BF33B8BD1D4F0B7000DE432D /* Pin.swift */,
 				BF33B8BE1D4F0B7000DE432D /* Photo+CoreDataProperties.swift */,
@@ -141,7 +142,6 @@
 				BF33B8C51D4F26BF00DE432D /* ViewController */,
 				BF33B8C81D50754400DE432D /* SubView */,
 				BFC0C51C1D4B63DB00631AB7 /* AppDelegate.swift */,
-				BF33B8B51D4C7CEE00DE432D /* CoreDataStack.swift */,
 				BF33B8BA1D4D9DB100DE432D /* GCDBlackBox.swift */,
 				BFC0C5201D4B63DB00631AB7 /* Main.storyboard */,
 				BFC0C5231D4B63DB00631AB7 /* Assets.xcassets */,

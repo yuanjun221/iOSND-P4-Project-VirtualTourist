@@ -112,20 +112,11 @@ extension MapViewController {
                 selectButton.enabled = true
             }
             
-            downloadPhotosModelBackground(ForPin: pin)
+            downloadPhotosModelBackground(WithStack: coreDataStack, ForPin: pin)
         }
     }
     
-    func downloadPhotosModelBackground(ForPin pin: Pin) {
-        coreDataStack.performBackgroundBatchOperation { workerContext in
-            self.getPhotosModelWithPin(self.coreDataStack.context, pin: pin) {
-                for photo in pin.photos! {
-                    let photo = photo as! Photo
-                    self.downloadImageDataForPhoto(photo, completionHandler: nil)
-                }
-            }
-        }
-    }
+
 }
 
 
@@ -310,7 +301,7 @@ extension MapViewController: MKMapViewDelegate {
                     self.coreDataStack.context.deleteObject(pin)
                     let newPin = Pin(context: self.coreDataStack.context, id: pointAnnotation.id, latitude: pointAnnotation.coordinate.latitude, longitude: pointAnnotation.coordinate.longitude)
                     
-                    self.downloadPhotosModelBackground(ForPin: newPin)
+                    self.downloadPhotosModelBackground(WithStack: self.coreDataStack, ForPin: newPin)
                 }
             }
         }

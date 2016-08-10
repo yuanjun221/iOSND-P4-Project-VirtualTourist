@@ -15,13 +15,7 @@ import CoreData
 class PhotoAlbumViewController: CoreDataCollectionViewController {
 
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
-    
-    lazy var coreDataStack: CoreDataStack = {
-        return (UIApplication.sharedApplication().delegate as! AppDelegate).coreDataStack
-    }()
-    
-    
-    
+
     private let imageCache = NSCache()
 }
 
@@ -126,6 +120,8 @@ extension PhotoAlbumViewController {
 extension PhotoAlbumViewController {
     
     func populateImage(WithPhoto photo: Photo, ForCell cell: VTCollectionViewCell) {
+        
+        cell.imageView.image = nil
         
         if let imageFromCache = imageCache.objectForKey(photo.imageURL!) as? UIImage {
             cell.imageView.image = imageFromCache

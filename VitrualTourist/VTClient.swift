@@ -45,7 +45,7 @@ extension VTClient {
             }
             
             guard error == nil else {
-                sendError("There was an error with request: \(error!.localizedDescription)")
+                completionHandlerForGET(result: nil, error: error)
                 return
             }
             
@@ -72,11 +72,12 @@ extension VTClient {
         
         let task = session.dataTaskWithRequest(request) { (data, response, error) in
             func sendError(error: String) {
-                completionHandlerForGETImageData(imageData: nil, error: NSError(domain: "taskForGETImageData", code: 1, userInfo: [NSLocalizedDescriptionKey : error]))
+                let error = NSError(domain: "taskForGETImageData", code: 1, userInfo: [NSLocalizedDescriptionKey : error])
+                completionHandlerForGETImageData(imageData: nil, error: error)
             }
             
             guard (error == nil) else {
-                sendError("There was an error with your request: \(error)")
+                completionHandlerForGETImageData(imageData: nil, error: error)
                 return
             }
             
