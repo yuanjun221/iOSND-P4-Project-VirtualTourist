@@ -18,6 +18,8 @@ extension Photo {
     @NSManaged var imageURL: String?
     @NSManaged var title: String?
     @NSManaged var owner: String?
+    @NSManaged var isDownloading: NSNumber?
+    @NSManaged var fetchImageDataTimedOut: NSNumber?
     
     @NSManaged var pin: Pin?
 

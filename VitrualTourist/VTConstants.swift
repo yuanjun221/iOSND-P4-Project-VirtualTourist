@@ -40,7 +40,7 @@ extension VTClient {
         static let Json = "json"
         static let DisableJSONCallback = "1" /* 1 means "yes" */
         static let MediumURL = "url_m"
-        static let PerPage = 100
+        static let PerPage = 8
     }
     
     // MARK: - Response Keys
@@ -51,6 +51,10 @@ extension VTClient {
         static let Title = "title"
         static let Owner = "owner"
         static let MediumURL = "url_m"
+        static let Farm = "farm"
+        static let Server = "server"
+        static let ID = "id"
+        static let Secret = "secret"
         static let Pages = "pages"
         static let Total = "total"
     }

@@ -16,7 +16,7 @@ struct CoreDataStack {
     private let modelURL : NSURL
     private let dbURL : NSURL
     private let persistingContext : NSManagedObjectContext
-    private let backgroundContext : NSManagedObjectContext
+    let backgroundContext : NSManagedObjectContext
     let context : NSManagedObjectContext
     
     
@@ -156,6 +156,8 @@ extension CoreDataStack {
         
         if delayInSeconds > 0 {
             save()
+            
+            print("autoSaving")
             
             let delayInNanoSeconds = UInt64(delayInSeconds) * NSEC_PER_SEC
             let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delayInNanoSeconds))

@@ -16,7 +16,7 @@ class PhotoAlbumViewController: CoreDataCollectionViewController {
 
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
 
-    private let imageCache = NSCache()
+    private var imageCache = NSCache()
 }
 
 
@@ -91,9 +91,21 @@ extension PhotoAlbumViewController {
     override func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionElementKindSectionHeader:
-            let headerView = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "mapCell", forIndexPath: indexPath) as! VTCollectionReusableView
+            let headerView = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "header", forIndexPath: indexPath) as! VTCollectionReusableHeaderView
             setMapViewAnnotation(ForMapView: headerView.mapView)
             return headerView
+        case UICollectionElementKindSectionFooter:
+            let footerView = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "footer", forIndexPath: indexPath) as! VTCollectionReusableFooterView
+            let newAlbumButton = footerView.newAlbumButton
+            newAlbumButton.addTarget(self, action: #selector(downloadPhotos), forControlEvents: .TouchUpInside)
+            
+            if pin.photos?.count == 0 {
+                newAlbumButton.alpha = 0
+            }
+            
+            self.newAlbumButton = newAlbumButton
+            
+            return footerView
         default:
             assert(false, "Unexpected element kind")
         }
@@ -120,11 +132,12 @@ extension PhotoAlbumViewController {
 extension PhotoAlbumViewController {
     
     func populateImage(WithPhoto photo: Photo, ForCell cell: VTCollectionViewCell) {
-        
+
         cell.imageView.image = nil
         
         if let imageFromCache = imageCache.objectForKey(photo.imageURL!) as? UIImage {
             cell.imageView.image = imageFromCache
+            cell.imageView.alpha = 1
             return
         }
         
@@ -138,7 +151,8 @@ extension PhotoAlbumViewController {
             setImage(image, WithPhoto: photo, ForCell: cell)
             
         } else {
-            downloadImageDataForPhoto(photo) {
+            
+            downloadImageDataForPhoto(coreDataStack.context, photo: photo) {
                 
                 guard let imageData = photo.imageData else {
                     print("No imageData in photo \(photo)")
@@ -158,10 +172,12 @@ extension PhotoAlbumViewController {
     }
     
     func setImage(image: UIImage, WithPhoto photo: Photo, ForCell cell: VTCollectionViewCell) {
-        if cell.urlString == photo.imageURL! {
-            cell.imageView.image = image
-        }
         
-        imageCache.setObject(image, forKey: photo.imageURL!)
+        if let imageURLString = photo.imageURL {
+            if cell.urlString == imageURLString {
+                cell.imageView.image = image
+            }
+            imageCache.setObject(image, forKey: imageURLString)
+        }
     }
 }

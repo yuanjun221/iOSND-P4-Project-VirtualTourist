@@ -1,5 +1,5 @@
 //
-//  VTCollectionReusableView.swift
+//  VTCollectionReusableHeaderView.swift
 //  VitrualTourist
 //
 //  Created by Jun.Yuan on 16/8/4.
@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class VTCollectionReusableView: UICollectionReusableView {
+class VTCollectionReusableHeaderView: UICollectionReusableView {
         
     @IBOutlet weak var mapView: MKMapView!
 }

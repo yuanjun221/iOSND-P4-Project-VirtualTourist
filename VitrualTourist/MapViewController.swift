@@ -101,6 +101,7 @@ extension MapViewController {
             let id = NSUUID().UUIDString
             
             let pin = Pin(context:coreDataStack.context, id: id, latitude: coordinate.latitude, longitude: coordinate.longitude)
+            coreDataStack.context.processPendingChanges()
             
             let annotaion = VTMKPointAnnotation()
             annotaion.coordinate = coordinate
@@ -112,11 +113,9 @@ extension MapViewController {
                 selectButton.enabled = true
             }
             
-            downloadPhotosModelBackground(WithStack: coreDataStack, ForPin: pin)
+            downloadPhotosBackground(WithStack: coreDataStack, ForPin: pin)
         }
     }
-    
-
 }
 
 
@@ -128,7 +127,7 @@ extension MapViewController {
         selectButton.title = ""
         selectButton.title = isSelecting ? "Done" : "Select"
         
-        UIView.animateWithDuration(0.25) {
+        performAnimation {
             self.navigationController?.toolbarHidden = !self.isSelecting
         }
         
@@ -170,7 +169,7 @@ extension MapViewController {
     func quitSelectingState() {
         isSelecting = false
         selectButton.title = "Select"
-        UIView.animateWithDuration(0.25) {
+        performAnimation {
             self.navigationController?.toolbarHidden = true
         }
         resetToolbar()
@@ -299,9 +298,11 @@ extension MapViewController: MKMapViewDelegate {
                     }
                     
                     self.coreDataStack.context.deleteObject(pin)
-                    let newPin = Pin(context: self.coreDataStack.context, id: pointAnnotation.id, latitude: pointAnnotation.coordinate.latitude, longitude: pointAnnotation.coordinate.longitude)
                     
-                    self.downloadPhotosModelBackground(WithStack: self.coreDataStack, ForPin: newPin)
+                    let newPin = Pin(context: self.coreDataStack.context, id: pointAnnotation.id, latitude: pointAnnotation.coordinate.latitude, longitude: pointAnnotation.coordinate.longitude)
+                    self.coreDataStack.context.processPendingChanges()
+                    
+                    self.downloadPhotosBackground(WithStack: self.coreDataStack, ForPin: newPin)
                 }
             }
         }
@@ -366,6 +367,14 @@ extension MapViewController {
     }
     
     func deleteSelectedPins() {
+        
+        for annotation in mapView.annotations {
+            let pinAnnotation = annotation as! VTMKPointAnnotation
+            if pinAnnotation.isSelected {
+                mapView.removeAnnotation(annotation)
+            }
+        }
+        
         let predicate = NSPredicate(format: "isSelected == %@", true)
         
         fetchPinsWithPredicate(predicate) { results in
@@ -376,13 +385,7 @@ extension MapViewController {
             for pin in results {
                 self.coreDataStack.context.deleteObject(pin)
             }
-        }
-        
-        for annotation in mapView.annotations {
-            let pinAnnotation = annotation as! VTMKPointAnnotation
-            if pinAnnotation.isSelected == true {
-                mapView.removeAnnotation(annotation)
-            }
+            self.coreDataStack.context.processPendingChanges()
         }
         
         enableDraggableForAnnotationView(true)

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10174" systemVersion="15G31" minimumToolsVersion="Xcode 7.0">
     <entity name="Photo" representedClassName=".Photo" syncable="YES">
+        <attribute name="fetchImageDataTimedOut" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="imageData" optional="YES" attributeType="Binary" storedInTruthFile="YES" syncable="YES"/>
         <attribute name="imageURL" attributeType="String" syncable="YES"/>
-        <attribute name="owner" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isDownloading" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
+        <attribute name="owner" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="pin" maxCount="1" deletionRule="Nullify" destinationEntity="Pin" inverseName="photos" inverseEntity="Pin" syncable="YES"/>
+        <relationship name="pin" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Pin" inverseName="photos" inverseEntity="Pin" syncable="YES"/>
     </entity>
     <entity name="Pin" representedClassName=".Pin" syncable="YES">
         <attribute name="fetchPhotosTimedOut" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
@@ -18,7 +20,7 @@
         <relationship name="photos" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="Photo" inverseName="pin" inverseEntity="Photo" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Photo" positionX="142" positionY="39" width="128" height="120"/>
+        <element name="Photo" positionX="142" positionY="39" width="128" height="150"/>
         <element name="Pin" positionX="-63" positionY="-21" width="128" height="165"/>
     </elements>
 </model>
