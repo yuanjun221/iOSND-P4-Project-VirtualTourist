@@ -300,7 +300,7 @@ extension MapViewController: MKMapViewDelegate {
                     self.coreDataStack.context.deleteObject(pin)
                     
                     let newPin = Pin(context: self.coreDataStack.context, id: pointAnnotation.id, latitude: pointAnnotation.coordinate.latitude, longitude: pointAnnotation.coordinate.longitude)
-                    self.coreDataStack.context.processPendingChanges()
+                    // self.coreDataStack.context.processPendingChanges()
                     
                     self.downloadPhotosBackground(WithStack: self.coreDataStack, ForPin: newPin)
                 }
@@ -385,7 +385,7 @@ extension MapViewController {
             for pin in results {
                 self.coreDataStack.context.deleteObject(pin)
             }
-            self.coreDataStack.context.processPendingChanges()
+            // self.coreDataStack.context.processPendingChanges()
         }
         
         enableDraggableForAnnotationView(true)

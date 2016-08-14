@@ -15,8 +15,8 @@ extension UIViewController {
     func downloadPhotosBackground(WithStack coreDataStack: CoreDataStack, ForPin pin: Pin) {
         
         self.getPhotosModelWithPin(coreDataStack.context, pin: pin) {
-            // debug: success get photos model, will download image data for each photo
-            print(pin)
+            
+            print("download photos model succeed for: \(pin)")
             
             coreDataStack.performBackgroundBatchOperation { workerContext in
                 for photo in pin.photos! {

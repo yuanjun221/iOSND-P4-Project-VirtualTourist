@@ -33,7 +33,7 @@ class CoreDataCollectionViewController: UICollectionViewController {
     
     var pin: Pin!
     
-    private var blockOperationsForCollectionView: [NSBlockOperation]!
+    private var blockOperations = [NSBlockOperation]()
     
     lazy private var activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
@@ -130,11 +130,19 @@ extension CoreDataCollectionViewController {
 extension CoreDataCollectionViewController {
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        
+        /*
         if let fetchedResultsController = fetchedResultsControllerForPhotos {
-            return fetchedResultsController.sections![section].numberOfObjects;
+            return fetchedResultsController.sections![section].numberOfObjects
         } else {
             return 0
         }
+        */
+        
+        if let count = fetchedResultsControllerForPhotos!.sections?[section].numberOfObjects {
+            return count
+        }
+        return 0
     }
 }
 
@@ -168,12 +176,6 @@ extension CoreDataCollectionViewController {
 extension CoreDataCollectionViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
-
-        if controller == fetchedResultsControllerForPhotos {
-    
-            blockOperationsForCollectionView = []
-
-        }
         
         if controller == fetchedResultsControllerForPin {
             
@@ -271,35 +273,23 @@ extension CoreDataCollectionViewController: NSFetchedResultsControllerDelegate {
         if controller == fetchedResultsControllerForPhotos {
             switch type {
             case .Insert:
-                let blockOperation = NSBlockOperation {
+                blockOperations.append(NSBlockOperation {
                     self.collectionView?.insertItemsAtIndexPaths([newIndexPath!])
-                }
-                blockOperationsForCollectionView.append(blockOperation)
+                })
                 
             case .Delete:
-                let blockOperation = NSBlockOperation {
+                blockOperations.append(NSBlockOperation {
                     self.collectionView?.deleteItemsAtIndexPaths([indexPath!])
-                }
-                blockOperationsForCollectionView.append(blockOperation)
+                })
                 
             case .Update:
-                let blockOperation = NSBlockOperation {
+                blockOperations.append(NSBlockOperation {
                     self.collectionView?.reloadItemsAtIndexPaths([indexPath!])
-                }
-                blockOperationsForCollectionView.append(blockOperation)
+                })
             
-                
-            case .Move:
-                let blockOperationToDelete = NSBlockOperation {
-                    self.collectionView?.deleteItemsAtIndexPaths([indexPath!])
-                }
-                let blockOperationToInsert = NSBlockOperation {
-                    self.collectionView?.insertItemsAtIndexPaths([newIndexPath!])
-                }
-                blockOperationsForCollectionView.append(blockOperationToDelete)
-                blockOperationsForCollectionView.append(blockOperationToInsert)
-            
-
+            default:
+                break
+            }
         }
     }
     
@@ -307,11 +297,10 @@ extension CoreDataCollectionViewController: NSFetchedResultsControllerDelegate {
         
         if controller == fetchedResultsControllerForPhotos {
             collectionView?.performBatchUpdates({
-                for operation in self.blockOperationsForCollectionView {
+                for operation in self.blockOperations {
                     operation.start()
                 }
                 }, completion: nil)
-            }
         }
     }
 }
@@ -328,18 +317,16 @@ extension CoreDataCollectionViewController {
         refreshControl.removeFromSuperview()
         label.text = ""
         
-        deleteCurrentPhotos()
+        // deleteCurrentPhotos()
 
         downloadPhotosBackground(WithStack: coreDataStack, ForPin: pin)
     }
     
     func deleteCurrentPhotos() {
         if let photos = pin.photos {
-            if photos.count > 0 {
-                for photo in photos {
-                    let photo = photo as! Photo
-                    coreDataStack.context.deleteObject(photo)
-                }
+            for photo in photos {
+                let photo = photo as! Photo
+                coreDataStack.context.deleteObject(photo)
             }
             coreDataStack.context.processPendingChanges()
         }

@@ -36,7 +36,7 @@ extension VTClient {
                 // pin.photos = nil
                 pin.photos = NSOrderedSet(array: photos)
                 
-                context.processPendingChanges()
+                // context.processPendingChanges()
                 
                 completionHandlerForPhotosModel(result: true, error: nil)
             }
