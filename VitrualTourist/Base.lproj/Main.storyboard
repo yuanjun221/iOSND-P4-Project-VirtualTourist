@@ -45,7 +45,7 @@
                     </toolbarItems>
                     <navigationItem key="navigationItem" title="Virtual Tourist" id="aE6-NJ-zG5">
                         <barButtonItem key="backBarButtonItem" title=" " id="zQ3-AD-Ypi"/>
-                        <barButtonItem key="leftBarButtonItem" title="Select" id="iro-vs-7eN">
+                        <barButtonItem key="rightBarButtonItem" title="Select" id="iro-vs-7eN">
                             <connections>
                                 <action selector="selectButtonPressed:" destination="BYZ-38-t0r" id="aXj-i1-Bo0"/>
                             </connections>

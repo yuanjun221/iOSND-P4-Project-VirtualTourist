@@ -251,6 +251,8 @@ extension CoreDataCollectionViewController {
                 coreDataStack.context.deleteObject(photo)
             }
             coreDataStack.context.processPendingChanges()
+        } else {
+            updateUIForDeletePhotos()
         }
     }
 }

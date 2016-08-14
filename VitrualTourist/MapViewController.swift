@@ -258,7 +258,6 @@ extension MapViewController: MKMapViewDelegate {
                 if pinView.dragged {
                     pinView.dragged = false
                 } else {
-                    print("test")
                     self.pinToBeDelivered = pin
                     self.performSegueWithIdentifier("pushPhotoAlbumView", sender: self)
                 }
