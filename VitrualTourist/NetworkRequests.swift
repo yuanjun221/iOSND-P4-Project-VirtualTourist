@@ -16,8 +16,6 @@ extension UIViewController {
         
         self.getPhotosModelWithPin(coreDataStack.context, pin: pin) {
             
-            print("download photos model succeed for: \(pin)")
-            
             coreDataStack.performBackgroundBatchOperation { workerContext in
                 for photo in pin.photos! {
                     let photo = photo as! Photo

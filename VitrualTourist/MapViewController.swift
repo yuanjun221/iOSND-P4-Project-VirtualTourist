@@ -47,6 +47,8 @@ extension MapViewController {
 
         infoLabelButton.customView = infoLabel
         
+        setMapRegionFromUserDefaults()
+        
         setPinsDeselected()
         dropExistedPins()
 
@@ -58,6 +60,11 @@ extension MapViewController {
         infoLabel.text = "Tap pins to select"
         infoLabel.sizeToFit()
         trashButton.enabled = false
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        saveMapRegionToUserDefaults()
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -88,6 +95,35 @@ extension MapViewController {
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: coreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
         return fetchedResultsController
     }
+    
+    private func saveMapRegionToUserDefaults() {
+        
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        
+        userDefaults.setBool(true, forKey: VTClient.UserDefaultsKeys.HasLaunchedBefore)
+        userDefaults.setValue(mapView.centerCoordinate.latitude, forKey: VTClient.UserDefaultsKeys.Latitude)
+        userDefaults.setValue(mapView.centerCoordinate.longitude, forKey: VTClient.UserDefaultsKeys.Longitude)
+        userDefaults.setValue(mapView.region.span.latitudeDelta, forKey: VTClient.UserDefaultsKeys.LatitudeDelta)
+        userDefaults.setValue(mapView.region.span.longitudeDelta, forKey: VTClient.UserDefaultsKeys.LongitudeDelta)
+    }
+    
+    private func setMapRegionFromUserDefaults() {
+        
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        
+        if userDefaults.boolForKey(VTClient.UserDefaultsKeys.HasLaunchedBefore) {
+            let latitude = userDefaults.doubleForKey(VTClient.UserDefaultsKeys.Latitude)
+            let longitude = userDefaults.doubleForKey(VTClient.UserDefaultsKeys.Longitude)
+            let latitudeDelta = userDefaults.doubleForKey(VTClient.UserDefaultsKeys.LatitudeDelta)
+            let longitudeDelta = userDefaults.doubleForKey(VTClient.UserDefaultsKeys.LongitudeDelta)
+            
+            let centerCoordinate = CLLocationCoordinate2DMake(latitude, longitude)
+            let coordinateSpan = MKCoordinateSpanMake(latitudeDelta, longitudeDelta)
+            let region = MKCoordinateRegionMake(centerCoordinate, coordinateSpan)
+            
+            mapView.setRegion(region, animated: false)
+        }
+    }
 }
 
 
@@ -98,9 +134,10 @@ extension MapViewController {
         if !isSelecting && sender.state == .Began {
             let point = sender.locationInView(mapView)
             let coordinate = self.mapView.convertPoint(point, toCoordinateFromView: mapView)
+            let coordinateSpan = mapView.region.span
             let id = NSUUID().UUIDString
             
-            let pin = Pin(context:coreDataStack.context, id: id, latitude: coordinate.latitude, longitude: coordinate.longitude)
+            let pin = Pin(context:coreDataStack.context, id: id, latitude: coordinate.latitude, longitude: coordinate.longitude, latitudeDelta: coordinateSpan.latitudeDelta, longitudeDelta: coordinateSpan.longitudeDelta)
             coreDataStack.context.processPendingChanges()
             
             let annotaion = VTMKPointAnnotation()
@@ -116,6 +153,7 @@ extension MapViewController {
             downloadPhotosBackground(WithStack: coreDataStack, ForPin: pin)
         }
     }
+    
 }
 
 
@@ -303,7 +341,8 @@ extension MapViewController: MKMapViewDelegate {
                     
                     self.coreDataStack.context.deleteObject(pin)
                     
-                    let newPin = Pin(context: self.coreDataStack.context, id: pointAnnotation.id, latitude: pointAnnotation.coordinate.latitude, longitude: pointAnnotation.coordinate.longitude)
+                    let coordinateSpan = mapView.region.span
+                    let newPin = Pin(context: self.coreDataStack.context, id: pointAnnotation.id, latitude: pointAnnotation.coordinate.latitude, longitude: pointAnnotation.coordinate.longitude, latitudeDelta: coordinateSpan.latitudeDelta, longitudeDelta: coordinateSpan.longitudeDelta)
                     
                     self.downloadPhotosBackground(WithStack: self.coreDataStack, ForPin: newPin)
                 }

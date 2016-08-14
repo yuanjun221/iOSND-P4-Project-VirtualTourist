@@ -32,7 +32,7 @@ class CoreDataCollectionViewController: UICollectionViewController {
     }()
     
     var pin: Pin!
-    
+        
     private var blockOperations = [NSBlockOperation]()
     
     lazy private var activityIndicator: UIActivityIndicatorView = {
@@ -155,7 +155,9 @@ extension CoreDataCollectionViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
         
-        if controller == fetchedResultsControllerForPin {
+        print(pin)
+        
+        if controller == fetchedResultsControllerForPin && !pin.fault {
             
             if let noPhoto = pin.noPhoto {
                 

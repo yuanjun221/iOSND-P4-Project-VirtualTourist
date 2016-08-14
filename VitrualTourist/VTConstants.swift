@@ -7,6 +7,7 @@
 //
 
 
+// MARK: - Network Requests Constants
 extension VTClient {
     
     // MARK: - API Constants
@@ -57,5 +58,18 @@ extension VTClient {
         static let Secret = "secret"
         static let Pages = "pages"
         static let Total = "total"
+    }
+}
+
+
+// MARK: - Local Constants
+extension VTClient {
+    
+    struct UserDefaultsKeys {
+        static let HasLaunchedBefore = "HasLaunchedBefore"
+        static let Latitude = "latitude"
+        static let Longitude = "longitude"
+        static let LatitudeDelta = "latitudeDelta"
+        static let LongitudeDelta = "LongitudeDelta"
     }
 }

@@ -2,7 +2,7 @@
 //  Pin+CoreDataProperties.swift
 //  VitrualTourist
 //
-//  Created by Jun.Yuan on 16/8/8.
+//  Created by Jun.Yuan on 16/8/14.
 //  Copyright © 2016年 Jun.Yuan. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -14,14 +14,15 @@ import CoreData
 
 extension Pin {
 
+    @NSManaged var fetchPhotosTimedOut: NSNumber?
     @NSManaged var id: String?
     @NSManaged var isSelected: NSNumber?
     @NSManaged var latitude: NSNumber?
     @NSManaged var locationName: String?
     @NSManaged var longitude: NSNumber?
     @NSManaged var noPhoto: NSNumber?
-    @NSManaged var fetchPhotosTimedOut: NSNumber?
-    
+    @NSManaged var latitudeDelta: NSNumber?
+    @NSManaged var longitudeDelta: NSNumber?
     @NSManaged var photos: NSOrderedSet?
 
 }
