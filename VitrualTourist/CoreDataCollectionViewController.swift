@@ -84,8 +84,6 @@ extension CoreDataCollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(pin)
-        
         collectionView?.alwaysBounceVertical = true
         collectionView?.showsVerticalScrollIndicator = false
         
@@ -101,14 +99,7 @@ extension CoreDataCollectionViewController {
         
         if let noPhoto = pin.noPhoto {
             if Bool(noPhoto) {
-                activityIndicator.stopAnimating()
-                newAlbumButton?.alpha = 0
-                self.refreshControl.endRefreshing()
-                refreshControl.removeFromSuperview()
-                label.text = "No photos were found at this location."
-                performAnimation {
-                    self.label.alpha = 1
-                }
+                updateUIForNoPhoto()
             }
         } else {
             activityIndicator.startAnimating()
@@ -117,17 +108,12 @@ extension CoreDataCollectionViewController {
 }
 
 
-// MARK: - Subclass responsability
+// MARK: - Collection View Data Source
 extension CoreDataCollectionViewController {
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         fatalError("This method MUST be implemented by a subclass of CoreDataTableViewController")
     }
-}
-
-
-// MARK: - Collection View Data Source
-extension CoreDataCollectionViewController {
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
@@ -173,88 +159,37 @@ extension CoreDataCollectionViewController: NSFetchedResultsControllerDelegate {
             
             if let noPhoto = pin.noPhoto {
                 
-                // getPhotosModel returned no photo result: stop indicator animating, hide newAlbum button, remove refreshControl, configure label
+                // getPhotosModel returned no photo result
                 if Bool(noPhoto) {
                     
                     collectionView?.performBatchUpdates(nil) { success in
-                        
-                        self.activityIndicator.stopAnimating()
-                        
-                        self.newAlbumButton?.alpha = 0
-                        
-                        self.refreshControl.endRefreshing()
-                        self.refreshControl.removeFromSuperview()
-                        
-                        self.label.text = "No photos were found at this location."
-                        self.label.alpha = 0
-                        
-                        performAnimation {
-                            self.label.alpha = 1
-                        }
+                        self.updateUIForNoPhoto()
                     }
                     return
                 }
                 
-                // After delete current photos: start indicator animating and disable all other UI elements.
-                if pin.photos?.count == 0 && !Bool(noPhoto) && !Bool(pin.fetchPhotosTimedOut!) {
+                // After delete current photos
+                if fetchedResultsControllerForPhotos!.sections?[0].numberOfObjects == 0 && !Bool(noPhoto) && !Bool(pin.fetchPhotosTimedOut!) {
                     
                     collectionView?.performBatchUpdates(nil) { success in
-                        self.activityIndicator.startAnimating()
-                        
-                        self.newAlbumButton?.alpha = 0
-                        self.label.alpha = 0
-                        self.label.text = ""
-                        self.retryButton.alpha = 0
-                        self.refreshControl.endRefreshing()
-                        self.refreshControl.removeFromSuperview()
+                        self.updateUIForDeletePhotos()
                     }
                     return
                 }
             }
             
-            // getPhotosModel timed out: stop indicator animating, hide newAlbum button, add refreshControl, configure label, add retryButton, enable refreshControl.
+            // getPhotosModel timed out
             if Bool(pin.fetchPhotosTimedOut!) {
 
                 collectionView?.performBatchUpdates(nil) { success in
-                    
-                    self.activityIndicator.stopAnimating()
-                    
-                    self.newAlbumButton?.alpha = 0
-                    
-                    self.label.text = "Fetching photos timed out."
-                    self.label.alpha = 0
-                    
-                    self.retryButton.addTarget(self, action: #selector(self.downloadPhotos), forControlEvents: .TouchUpInside)
-                    self.retryButton.alpha = 0
-                    
-
-                    self.collectionView?.addSubview(self.refreshControl)
-                    
-                    performAnimation {
-                        self.label.alpha = 1
-                        self.retryButton.alpha = 1
-                    }
+                    self.updateUIForFetchPhotosTimedOut()
                 }
                 return
             }
             
-            // getPhotosModel returned normal state (often from previous getPhotosModel timed out state):
-            // stop indicator animating, diable all UI elements except refreshControl and newAlbumButton.
+            // getPhotosModel new album fetched
             collectionView?.performBatchUpdates(nil) { success in
-                
-                self.activityIndicator.stopAnimating()
-                
-                self.label.alpha = 0
-                self.label.text = ""
-                
-                self.retryButton.alpha = 0
-
-                awakeUIAfterSeconds(1) {
-                    self.collectionView?.addSubview(self.refreshControl)
-                    performAnimation {
-                        self.newAlbumButton?.alpha = 1
-                    }
-                }
+                self.updateUIForNewAlbumFetched()
             }
         
         }
@@ -298,19 +233,11 @@ extension CoreDataCollectionViewController: NSFetchedResultsControllerDelegate {
 }
 
 
+// MARK: - Network Request
 extension CoreDataCollectionViewController {
+    
     func downloadPhotos() {
-        
-        activityIndicator.startAnimating()
-        retryButton.alpha = 0
-        label.alpha = 0
-        newAlbumButton?.alpha = 0
-        self.refreshControl.endRefreshing()
-        refreshControl.removeFromSuperview()
-        label.text = ""
-        
         deleteCurrentPhotos()
-
         downloadPhotosBackground(WithStack: coreDataStack, ForPin: pin)
     }
     
@@ -324,6 +251,74 @@ extension CoreDataCollectionViewController {
                 coreDataStack.context.deleteObject(photo)
             }
             coreDataStack.context.processPendingChanges()
+        }
+    }
+}
+
+
+// MARK: - UI Configuration
+extension CoreDataCollectionViewController {
+    
+    func updateUIForNoPhoto() {
+        activityIndicator.stopAnimating()
+        
+        newAlbumButton?.alpha = 0
+        
+        refreshControl.endRefreshing()
+        refreshControl.removeFromSuperview()
+        
+        label.text = "No photos were found at this location."
+        label.alpha = 0
+        
+        performAnimation {
+            self.label.alpha = 1
+        }
+    }
+    
+    func updateUIForDeletePhotos() {
+        label.alpha = 0
+        label.text = ""
+        retryButton.alpha = 0
+        newAlbumButton?.alpha = 0
+        refreshControl.endRefreshing()
+        refreshControl.removeFromSuperview()
+        
+        activityIndicator.startAnimating()
+    }
+    
+    func updateUIForFetchPhotosTimedOut() {
+        activityIndicator.stopAnimating()
+        
+        newAlbumButton?.alpha = 0
+        
+        label.text = "Fetching photos timed out."
+        label.alpha = 0
+        
+        retryButton.addTarget(self, action: #selector(self.downloadPhotos), forControlEvents: .TouchUpInside)
+        retryButton.alpha = 0
+        
+        collectionView?.addSubview(self.refreshControl)
+        
+        performAnimation {
+            self.label.alpha = 1
+            self.retryButton.alpha = 1
+        }
+    }
+    
+    func updateUIForNewAlbumFetched() {
+        activityIndicator.stopAnimating()
+        
+        label.alpha = 0
+        label.text = ""
+        
+        retryButton.alpha = 0
+        
+        awakeUIAfterSeconds(1) {
+            self.collectionView?.addSubview(self.refreshControl)
+            self.newAlbumButton?.alpha = 0
+            performAnimation {
+                self.newAlbumButton?.alpha = 1
+            }
         }
     }
 }

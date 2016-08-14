@@ -99,7 +99,7 @@ extension PhotoAlbumViewController {
             let newAlbumButton = footerView.newAlbumButton
             newAlbumButton.addTarget(self, action: #selector(downloadPhotos), forControlEvents: .TouchUpInside)
             
-            if pin.photos?.count == 0 {
+            if fetchedResultsControllerForPhotos!.sections?[0].numberOfObjects == 0 {
                 newAlbumButton.alpha = 0
             }
             
