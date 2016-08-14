@@ -131,14 +131,6 @@ extension CoreDataCollectionViewController {
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
-        /*
-        if let fetchedResultsController = fetchedResultsControllerForPhotos {
-            return fetchedResultsController.sections![section].numberOfObjects
-        } else {
-            return 0
-        }
-        */
-        
         if let count = fetchedResultsControllerForPhotos!.sections?[section].numberOfObjects {
             return count
         }
@@ -317,15 +309,18 @@ extension CoreDataCollectionViewController {
         refreshControl.removeFromSuperview()
         label.text = ""
         
-        // deleteCurrentPhotos()
+        deleteCurrentPhotos()
 
         downloadPhotosBackground(WithStack: coreDataStack, ForPin: pin)
     }
     
     func deleteCurrentPhotos() {
-        if let photos = pin.photos {
+        
+        if fetchedResultsControllerForPhotos!.sections?[0].numberOfObjects > 0 {
+            
+            let photos = fetchedResultsControllerForPhotos?.fetchedObjects as! [Photo]
+            
             for photo in photos {
-                let photo = photo as! Photo
                 coreDataStack.context.deleteObject(photo)
             }
             coreDataStack.context.processPendingChanges()
