@@ -122,6 +122,10 @@ extension CoreDataCollectionViewController {
         if let noPhoto = pin.noPhoto {
             if Bool(noPhoto) {
                 updateUIForNoPhoto()
+            } else if fetchedResultsControllerForPhotos?.sections![0].numberOfObjects == 0 {
+                performAnimation {
+                    self.newAlbumButton?.alpha = 1
+                }
             }
         } else {
             activityIndicator.startAnimating()
@@ -141,6 +145,8 @@ extension CoreDataCollectionViewController {
         navigationController?.setToolbarHidden(!isSelecting, animated: true)
         
         if isSelecting {
+            refreshControl.endRefreshing()
+            refreshControl.removeFromSuperview()
             performAnimation {
                 self.newAlbumButton?.alpha = 0
             }
@@ -148,6 +154,7 @@ extension CoreDataCollectionViewController {
             deselectCell()
             resetToolbar()
             photosSelected = 0
+            collectionView?.addSubview(refreshControl)
             performAnimation {
                 self.newAlbumButton?.alpha = 1
             }
@@ -158,14 +165,40 @@ extension CoreDataCollectionViewController {
     
     @IBAction func trashButtonPressed(sender: AnyObject) {
         
+        let photoString = photosSelected == 1 ? "This photo" : "These photos"
+        let alertTitle = "\(photoString) will be removed from the album."
+        
+        let alertController = UIAlertController(title: alertTitle, message: nil, preferredStyle: .ActionSheet)
+        
+        let deleteActionTitle = photosSelected == 1 ? "Remove Photo" : "Remove \(photosSelected) Photos"
+        let deleteAction = UIAlertAction(title: deleteActionTitle, style: .Destructive) { deleteAction in
+            self.deleteSelectedPhotos()
+            self.quitSelectingState()
+            
+            if self.fetchedResultsControllerForPhotos?.sections![0].numberOfObjects == 0 {
+                self.downloadPhotos()
+            }
+            
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        
+        alertController.addAction(deleteAction)
+        alertController.addAction(cancelAction)
+        presentViewController(alertController, animated: true, completion: nil)
+        
     }
     
     func quitSelectingState() {
         isSelecting = false
         selectButton.title = "Select"
+        
         navigationController?.setToolbarHidden(true, animated: true)
         resetToolbar()
         photosSelected = 0
+        collectionView?.addSubview(refreshControl)
+        performAnimation {
+            self.newAlbumButton?.alpha = 1
+        }
     }
     
     func resetToolbar() {
@@ -175,10 +208,21 @@ extension CoreDataCollectionViewController {
     
     func deselectCell() {
         if let indexPaths = collectionView?.indexPathsForSelectedItems() {
-            for indexpath in indexPaths {
-                setCheckmarkImage(nil, forCellAtIndexPath: indexpath)
-                collectionView?.deselectItemAtIndexPath(indexpath, animated: false)
+            for indexPath in indexPaths {
+                setCheckmarkImage(nil, forCellAtIndexPath: indexPath)
+                collectionView?.deselectItemAtIndexPath(indexPath, animated: false)
             }
+        }
+    }
+    
+    func deleteSelectedPhotos() {
+        if let indexPaths = collectionView?.indexPathsForSelectedItems(), context = fetchedResultsControllerForPhotos?.managedObjectContext {
+            for indexPath in indexPaths {
+                let photo = fetchedResultsControllerForPhotos?.objectAtIndexPath(indexPath) as! Photo
+                context.deleteObject(photo)
+                collectionView?.deselectItemAtIndexPath(indexPath, animated: false)
+            }
+            context.processPendingChanges()
         }
     }
     
@@ -275,8 +319,6 @@ extension CoreDataCollectionViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
         
-        print(pin)
-        
         if controller == fetchedResultsControllerForPin && !pin.fault {
             
             if let noPhoto = pin.noPhoto {
@@ -290,6 +332,7 @@ extension CoreDataCollectionViewController: NSFetchedResultsControllerDelegate {
                     return
                 }
                 
+                
                 // After delete current photos
                 if fetchedResultsControllerForPhotos!.sections?[0].numberOfObjects == 0 && !Bool(noPhoto) && !Bool(pin.fetchPhotosTimedOut!) {
                     
@@ -298,6 +341,7 @@ extension CoreDataCollectionViewController: NSFetchedResultsControllerDelegate {
                     }
                     return
                 }
+                
             }
             
             // getPhotosModel timed out
@@ -335,9 +379,12 @@ extension CoreDataCollectionViewController: NSFetchedResultsControllerDelegate {
                 blockOperations.append(NSBlockOperation {
                     self.collectionView?.reloadItemsAtIndexPaths([indexPath!])
                 })
-            
-            default:
-                break
+                
+            case .Move:
+                blockOperations.append(NSBlockOperation {
+                    self.collectionView?.deleteItemsAtIndexPaths([indexPath!])
+                    self.collectionView?.insertItemsAtIndexPaths([newIndexPath!])
+                    })
             }
         }
     }

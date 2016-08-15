@@ -62,7 +62,6 @@ extension UIViewController {
     func downloadImageDataForPhoto(context:NSManagedObjectContext, photo: Photo, completionHandler:(() -> Void)?) {
         
         if Bool(photo.isDownloading!) {
-            // print("Abort downloading image data for 'Photo \(photo.objectID)'. Managed object is processing downloading in another thread.")
             return
         }
         
@@ -73,7 +72,7 @@ extension UIViewController {
         VTClient.sharedInstance().taskForGETImageData(imageURL!) { (data, error) in
             if let error = error {
                 
-                print("Error occurred when downloading image From URL (\(photo.imageURL!)) " + error.localizedDescription)
+                print("Error occurred when downloading image From URL (\(imageURL!)) " + error.localizedDescription)
                 switch error.code {
                 case -1001:
                     photo.fetchImageDataTimedOut = true
@@ -85,7 +84,7 @@ extension UIViewController {
                 return
             }
             
-            if photo.imageURL == nil {
+            if photo.fault {
                 print("Discard downloaded image data for 'Photo \(photo.objectID)'. Managed object has been removed from its context.")
                 return
             }
