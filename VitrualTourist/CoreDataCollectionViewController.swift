@@ -31,9 +31,11 @@ class CoreDataCollectionViewController: UICollectionViewController {
         }
     }
     
+    /*
     lazy var coreDataStack: CoreDataStack = {
         return (UIApplication.sharedApplication().delegate as! AppDelegate).coreDataStack
     }()
+    */
     
     var pin: Pin!
         
@@ -407,21 +409,23 @@ extension CoreDataCollectionViewController {
     
     func downloadPhotos() {
         deleteCurrentPhotos()
-        downloadPhotosBackground(WithStack: coreDataStack, ForPin: pin)
+        downloadPhotosBackgroundForPin(pin)
     }
     
     func deleteCurrentPhotos() {
         
-        if fetchedResultsControllerForPhotos!.sections?[0].numberOfObjects > 0 {
-            
-            let photos = fetchedResultsControllerForPhotos?.fetchedObjects as! [Photo]
-            
-            for photo in photos {
-                coreDataStack.context.deleteObject(photo)
+        if let context = fetchedResultsControllerForPhotos?.managedObjectContext {
+            if fetchedResultsControllerForPhotos!.sections?[0].numberOfObjects > 0 {
+                
+                let photos = fetchedResultsControllerForPhotos?.fetchedObjects as! [Photo]
+                
+                for photo in photos {
+                    context.deleteObject(photo)
+                }
+                context.processPendingChanges()
+            } else {
+                updateUIForDeletePhotos()
             }
-            coreDataStack.context.processPendingChanges()
-        } else {
-            updateUIForDeletePhotos()
         }
     }
 }

@@ -41,7 +41,7 @@ extension VTClient {
         static let Json = "json"
         static let DisableJSONCallback = "1" /* 1 means "yes" */
         static let MediumURL = "url_m"
-        static let PerPage = 8
+        static let PerPage = 20
     }
     
     // MARK: - Response Keys

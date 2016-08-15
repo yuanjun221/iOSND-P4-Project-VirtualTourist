@@ -16,8 +16,6 @@ class PhotoAlbumViewController: CoreDataCollectionViewController {
 
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     
-
-    
     private var imageCache = NSCache()
     
     lazy private var mapRegion: MKCoordinateRegion = {
@@ -159,7 +157,7 @@ extension PhotoAlbumViewController {
             
         } else {
             
-            downloadImageDataForPhoto(coreDataStack.context, photo: photo) {
+            downloadImageDataForPhoto(photo) {
                 
                 guard let imageData = photo.imageData else {
                     print("No imageData in photo \(photo)")

@@ -13,29 +13,27 @@ import CoreData
 // MARK: - Request Method Convenience
 extension VTClient {
     
-    func getPhotosModelWithPin(context:NSManagedObjectContext, pin: Pin, completionHandlerForPhotosModel: (result: Bool, error: NSError?) -> Void) {
+    func getPhotosModelWithPin(context:NSManagedObjectContext, pin: Pin, completionHandlerForPhotosModel: (result: [Photo]?, error: NSError?) -> Void) {
         let latitude = Double(pin.latitude!)
         let longitude = Double(pin.longitude!)
         
         VTClient.sharedInstance().getRandomPageWithLocation(latitude, longitude: longitude) { (randomPage, error) in
             
             guard error == nil else {
-                completionHandlerForPhotosModel(result: false, error: error)
+                completionHandlerForPhotosModel(result: nil, error: error)
                 return
             }
             
             VTClient.sharedInstance().getPhotosArray(latitude, longitude: longitude, page: randomPage!) { (photosArray, error) in
             
                 guard error == nil else {
-                    completionHandlerForPhotosModel(result: false, error: error)
+                    completionHandlerForPhotosModel(result: nil, error: error)
                     return
                 }
                 
                 let photos = Photo.photosFromResults(context, results: photosArray!)
                 
-                pin.photos = NSOrderedSet(array: photos)
-                
-                completionHandlerForPhotosModel(result: true, error: nil)
+                completionHandlerForPhotosModel(result: photos, error: nil)
             }
         }
     }
@@ -52,7 +50,7 @@ extension VTClient {
             ParameterKeys.NoJSONCallback: ParameterValues.DisableJSONCallback
         ]
         
-        let errorDomain = "getRandomPage parsing"
+        let errorDomain = "getRandomPageWithLocation"
         
         taskForGETMethod(WithParameters: parameters) { (results, error) in
             guard error == nil else {
@@ -95,7 +93,7 @@ extension VTClient {
             ParameterKeys.Page: page
         ]
         
-        let errorDomain = "getPhotosDictionary parsing"
+        let errorDomain = "getPhotosArray"
         
         taskForGETMethod(WithParameters: parameters) { (results, error) in
             guard error == nil else {

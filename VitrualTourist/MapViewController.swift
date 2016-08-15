@@ -150,7 +150,7 @@ extension MapViewController {
                 selectButton.enabled = true
             }
             
-            downloadPhotosBackground(WithStack: coreDataStack, ForPin: pin)
+            downloadPhotosBackgroundForPin(pin)
         }
     }
     
@@ -340,7 +340,7 @@ extension MapViewController: MKMapViewDelegate {
                     let coordinateSpan = mapView.region.span
                     let newPin = Pin(context: self.coreDataStack.context, id: pointAnnotation.id, latitude: pointAnnotation.coordinate.latitude, longitude: pointAnnotation.coordinate.longitude, latitudeDelta: coordinateSpan.latitudeDelta, longitudeDelta: coordinateSpan.longitudeDelta)
                     
-                    self.downloadPhotosBackground(WithStack: self.coreDataStack, ForPin: newPin)
+                    self.downloadPhotosBackgroundForPin(newPin)
                 }
             }
         }
