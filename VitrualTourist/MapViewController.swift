@@ -38,14 +38,6 @@ class MapViewController: UIViewController {
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.coreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
         return fetchedResultsController
     }()
-    
-//    lazy private var fetchedResultsControllerForSelectedPins: NSFetchedResultsController = {
-//        let fetchRequest = NSFetchRequest(entityName: "Pin")
-//        let sortDescriptor = NSSortDescriptor(key: "latitude", ascending: true)
-//        let predicateForPhotos = NSPredicate(format: "isSelected == %@", true)
-//        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.coreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
-//        return fetchedResultsController
-//    }()
 }
 
 
@@ -71,7 +63,6 @@ extension MapViewController {
         
         setPinsDeselected()
         dropExistedPins()
-
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -168,7 +159,6 @@ extension MapViewController {
             downloadPhotosBackgroundForPin(pin)
         }
     }
-    
 }
 
 
@@ -179,16 +169,11 @@ extension MapViewController {
         isSelecting = !isSelecting
         selectButton.title = ""
         selectButton.title = isSelecting ? "Done" : "Select"
-        
         navigationController?.setToolbarHidden(!isSelecting, animated: true)
+        enableDraggableForAnnotationView(!isSelecting)
         
-        if isSelecting {
-            enableDraggableForAnnotationView(false)
-//            fetchExistedPins()      
-        } else {
-            enableDraggableForAnnotationView(true)
-            setPinsDeselected()
-            setPinAnnotationsDeselected()
+        if !isSelecting {
+            deselectPins()
             resetToolbar()
             pinsSelected = 0
         }
@@ -219,6 +204,7 @@ extension MapViewController {
     
     func quitSelectingState() {
         isSelecting = false
+        selectButton.title = ""
         selectButton.title = "Select"
         navigationController?.setToolbarHidden(true, animated: true)
         resetToolbar()
@@ -237,16 +223,19 @@ extension MapViewController {
         }
     }
     
-    func setPinAnnotationsDeselected() {
+    func deselectPins() {
         for annotation in mapView.annotations {
+            
+            let annotation = annotation as! VTMKPointAnnotation
+            let pin = annotation.pin
+            
+            if Bool(pin.isSelected!) {
+                pin.isSelected = false
+            }
+            
             if let annotaionView = mapView.viewForAnnotation(annotation) as? MKPinAnnotationView {
-                let pinAnnotation = annotaionView.annotation as! VTMKPointAnnotation
-                
-                let pin = pinAnnotation.pin
-                
-                if Bool(pin.isSelected!) {
+                if annotaionView.pinTintColor == UIColor.lightGrayColor() {
                     annotaionView.pinTintColor = MKPinAnnotationView.redPinColor()
-                    pin.isSelected = false
                 }
             }
         }
@@ -358,15 +347,6 @@ extension MapViewController {
         }
     }
     
-//    func executeSearchSelectedPins() {
-//        do {
-//            try fetchedResultsControllerForSelectedPins.performFetch()
-//        } catch let error as NSError {
-//            print("Error while trying to perform a search: " + error.localizedDescription)
-//        }
-//    }
-    
-    
     func fetchPins(WithPredicate predicate: NSPredicate?, completionHandler: (results: [Pin]?) -> Void) {
         let fetchRequest = NSFetchRequest(entityName: "Pin")
         fetchRequest.predicate = predicate
@@ -380,33 +360,7 @@ extension MapViewController {
         }
     }
     
-//    func fetchExistedPins() {
-//        fetchPins(WithPredicate: nil) { results in
-//            guard let results = results else {
-//                return
-//            }
-//            
-//            self.pins = results
-//        }
-//    }
-    
     func dropExistedPins() {
-        
-        
-//        fetchExistedPins()
-//        
-//        if !pins.isEmpty {
-//            for pin in pins {
-//                let annotation = VTMKPointAnnotation()
-//                let coordinate = CLLocationCoordinate2D(latitude: Double(pin.latitude!), longitude: Double(pin.longitude!))
-//                annotation.coordinate = coordinate
-//                annotation.pin = pin
-//                mapView.addAnnotation(annotation)
-//            }
-//        } else {
-//            selectButton.enabled = false
-//        }
- 
         executeSearchExistedPins()
         
         if let pins = fetchedResultsControllerForExistedPins.fetchedObjects as? [Pin] where fetchedResultsControllerForExistedPins.sections![0].numberOfObjects > 0 {
@@ -437,7 +391,6 @@ extension MapViewController {
     }
     
     func deleteSelectedPins() {
-        
         for annotation in mapView.annotations {
             let pinAnnotation = annotation as! VTMKPointAnnotation
             
@@ -448,7 +401,6 @@ extension MapViewController {
                 mapView.removeAnnotation(annotation)
             }
         }
-        
         enableDraggableForAnnotationView(true)
     }
 }
