@@ -20,7 +20,7 @@ class PhotoAlbumViewController: CoreDataCollectionViewController {
     
     lazy private var mapRegion: MKCoordinateRegion = {
         let centerCoordinate = CLLocationCoordinate2DMake(Double(self.pin.latitude!), Double(self.pin.longitude!))
-        let coordinateSpan = MKCoordinateSpanMake(Double(self.pin.latitudeDelta!) * 0.6, Double(self.pin.longitudeDelta!) * 0.6)
+        let coordinateSpan = MKCoordinateSpanMake(Double(self.pin.latitudeDelta!) * 0.4, Double(self.pin.longitudeDelta!) * 0.4)
         let region = MKCoordinateRegionMake(centerCoordinate, coordinateSpan)
         return region
     }()

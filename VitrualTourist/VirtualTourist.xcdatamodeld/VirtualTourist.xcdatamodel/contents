@@ -11,7 +11,6 @@
     </entity>
     <entity name="Pin" representedClassName=".Pin" syncable="YES">
         <attribute name="fetchPhotosTimedOut" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
-        <attribute name="id" attributeType="String" syncable="YES"/>
         <attribute name="isSelected" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="latitude" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="latitudeDelta" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
@@ -23,6 +22,6 @@
     </entity>
     <elements>
         <element name="Photo" positionX="142" positionY="39" width="128" height="150"/>
-        <element name="Pin" positionX="-63" positionY="-21" width="128" height="195"/>
+        <element name="Pin" positionX="-63" positionY="-21" width="128" height="180"/>
     </elements>
 </model>

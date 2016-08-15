@@ -15,7 +15,6 @@ import CoreData
 extension Pin {
 
     @NSManaged var fetchPhotosTimedOut: NSNumber?
-    @NSManaged var id: String?
     @NSManaged var isSelected: NSNumber?
     @NSManaged var latitude: NSNumber?
     @NSManaged var locationName: String?

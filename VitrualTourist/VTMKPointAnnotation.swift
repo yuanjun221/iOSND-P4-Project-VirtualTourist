@@ -10,7 +10,6 @@ import MapKit
 
 class VTMKPointAnnotation: MKPointAnnotation {
     
-    var id: String!
-    var isSelected: Bool = false
+    var pin: Pin!
     var draggable: Bool = true
 }
