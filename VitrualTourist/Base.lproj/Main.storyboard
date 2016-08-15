@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Virtual Tourist-->
@@ -93,16 +94,26 @@
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Lr1-3S-vLE">
                                             <rect key="frame" x="0.0" y="0.0" width="150" height="150"/>
                                         </imageView>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6Ak-yW-JBY" userLabel="Check Mark">
+                                            <rect key="frame" x="120" y="120" width="22" height="22"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="22" id="PV3-3x-CWl"/>
+                                                <constraint firstAttribute="width" constant="22" id="SmB-tc-qUt"/>
+                                            </constraints>
+                                        </imageView>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </view>
                                 <constraints>
                                     <constraint firstItem="Lr1-3S-vLE" firstAttribute="height" secondItem="MAK-Q3-uOu" secondAttribute="height" id="Bmf-Rx-FP5"/>
                                     <constraint firstItem="Lr1-3S-vLE" firstAttribute="centerX" secondItem="MAK-Q3-uOu" secondAttribute="centerX" id="FX1-Je-7le"/>
+                                    <constraint firstAttribute="trailingMargin" secondItem="6Ak-yW-JBY" secondAttribute="trailing" id="Xtq-Jq-dVT"/>
+                                    <constraint firstAttribute="bottomMargin" secondItem="6Ak-yW-JBY" secondAttribute="bottom" id="dJ9-P6-gPL"/>
                                     <constraint firstItem="Lr1-3S-vLE" firstAttribute="width" secondItem="MAK-Q3-uOu" secondAttribute="width" id="pnb-B6-FM0"/>
                                     <constraint firstItem="Lr1-3S-vLE" firstAttribute="centerY" secondItem="MAK-Q3-uOu" secondAttribute="centerY" id="xk5-0g-ui3"/>
                                 </constraints>
                                 <connections>
+                                    <outlet property="checkmarkImageView" destination="6Ak-yW-JBY" id="AYu-Wj-grj"/>
                                     <outlet property="imageView" destination="Lr1-3S-vLE" id="Jpa-tY-QYu"/>
                                 </connections>
                             </collectionViewCell>
@@ -153,10 +164,28 @@
                             <outlet property="delegate" destination="ASj-iW-8D9" id="iLm-FH-EU9"/>
                         </connections>
                     </collectionView>
-                    <toolbarItems/>
-                    <navigationItem key="navigationItem" id="uz5-dA-Gg4"/>
+                    <toolbarItems>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="zve-sg-eHH"/>
+                        <barButtonItem enabled="NO" title="InfoLabel" id="qnc-aA-6dh"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="wda-4e-6lZ"/>
+                        <barButtonItem systemItem="trash" id="m46-In-7ZS">
+                            <connections>
+                                <action selector="trashButtonPressed:" destination="ASj-iW-8D9" id="2U7-fZ-zTk"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" id="uz5-dA-Gg4">
+                        <barButtonItem key="rightBarButtonItem" title="Select" id="bCn-Yy-485">
+                            <connections>
+                                <action selector="selectButtonPressed:" destination="ASj-iW-8D9" id="ngv-xj-bnH"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="flowLayout" destination="pts-2Z-6s6" id="1cv-GF-NTu"/>
+                        <outlet property="infoLabelButton" destination="qnc-aA-6dh" id="8Zy-RI-KAJ"/>
+                        <outlet property="selectButton" destination="bCn-Yy-485" id="scQ-Ey-R63"/>
+                        <outlet property="trashButton" destination="m46-In-7ZS" id="dbA-1C-eEl"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="STA-hl-yCg" userLabel="First Responder" sceneMemberID="firstResponder"/>

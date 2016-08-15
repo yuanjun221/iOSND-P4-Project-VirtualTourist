@@ -13,4 +13,6 @@ class VTCollectionViewCell: UICollectionViewCell {
     var urlString: String!
     
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var checkmarkImageView: UIImageView!
+    
 }

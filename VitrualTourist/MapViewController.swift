@@ -40,12 +40,15 @@ extension MapViewController {
         
         mapView.delegate = self
         
-        navigationController?.toolbarHidden = true
+        navigationController?.setToolbarHidden(true, animated: false)
         
         infoLabel.backgroundColor = UIColor.clearColor()
         infoLabel.textAlignment = .Center
-
         infoLabelButton.customView = infoLabel
+        
+        infoLabel.text = "Tap pins to select"
+        infoLabel.sizeToFit()
+        trashButton.enabled = false
         
         setMapRegionFromUserDefaults()
         
@@ -57,9 +60,6 @@ extension MapViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        infoLabel.text = "Tap pins to select"
-        infoLabel.sizeToFit()
-        trashButton.enabled = false
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -165,13 +165,11 @@ extension MapViewController {
         selectButton.title = ""
         selectButton.title = isSelecting ? "Done" : "Select"
         
-        performAnimation {
-            self.navigationController?.toolbarHidden = !self.isSelecting
-        }
+        navigationController?.setToolbarHidden(!isSelecting, animated: true)
         
         if isSelecting {
             enableDraggableForAnnotationView(false)
-            fetchExistedPins()
+            fetchExistedPins()      // TODO: Can be removed?
         } else {
             enableDraggableForAnnotationView(true)
             setPinsDeselected()
@@ -207,9 +205,7 @@ extension MapViewController {
     func quitSelectingState() {
         isSelecting = false
         selectButton.title = "Select"
-        performAnimation {
-            self.navigationController?.toolbarHidden = true
-        }
+        navigationController?.setToolbarHidden(true, animated: true)
         resetToolbar()
         pinsSelected = 0
     }

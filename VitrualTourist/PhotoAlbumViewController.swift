@@ -15,7 +15,9 @@ import CoreData
 class PhotoAlbumViewController: CoreDataCollectionViewController {
 
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
+    
 
+    
     private var imageCache = NSCache()
     
     lazy private var mapRegion: MKCoordinateRegion = {
@@ -125,16 +127,8 @@ extension PhotoAlbumViewController {
             annotation.coordinate = coordinate
             mapView.addAnnotation(annotation)
             
-            /*
-            mapView.setCenterCoordinate(coordinate, animated: false)
-            
-            let region = CLCircularRegion(center: coordinate, radius: 5000, identifier: "Town")
-            let coordinateRegion = MKCoordinateRegionMakeWithDistance(coordinate, region.radius * 2, region.radius * 2)
-            mapView.regionThatFits(coordinateRegion)
-            mapView.setRegion(coordinateRegion, animated: false)
-            */
             mapView.regionThatFits(mapRegion)
-            mapView.setRegion(mapRegion, animated: true)
+            mapView.setRegion(mapRegion, animated: false)
         }
     }
 }

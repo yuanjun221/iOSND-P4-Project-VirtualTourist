@@ -13,6 +13,10 @@ import CoreData
 // MARK: - Properties
 class CoreDataCollectionViewController: UICollectionViewController {
     
+    @IBOutlet weak var selectButton: UIBarButtonItem!
+    @IBOutlet weak var infoLabelButton: UIBarButtonItem!
+    @IBOutlet weak var trashButton: UIBarButtonItem!
+    
     var fetchedResultsControllerForPhotos: NSFetchedResultsController? {
         didSet {
             fetchedResultsControllerForPhotos?.delegate = self
@@ -76,6 +80,15 @@ class CoreDataCollectionViewController: UICollectionViewController {
     
     var newAlbumButton: UIButton?
     
+    private var infoLabel = UILabel(frame: CGRectZero)
+    private var isSelecting: Bool = false
+    private var photosSelected: Int = 0
+    
+    lazy private var checkmarkImage: UIImage = {
+        let checkmarkImage = UIImage(named: "Checkmark")!
+        return checkmarkImage
+    }()
+ 
 }
 
 
@@ -86,6 +99,15 @@ extension CoreDataCollectionViewController {
         
         collectionView?.alwaysBounceVertical = true
         collectionView?.showsVerticalScrollIndicator = false
+        navigationController?.setToolbarHidden(true, animated: false)
+        
+        infoLabel.backgroundColor = UIColor.clearColor()
+        infoLabel.textAlignment = .Center
+        infoLabelButton.customView = infoLabel
+        
+        infoLabel.text = "Tap photos to select"
+        infoLabel.sizeToFit()
+        trashButton.enabled = false
         
         refreshControl.addTarget(self, action: #selector(downloadPhotos), forControlEvents: .ValueChanged)
         
@@ -108,6 +130,61 @@ extension CoreDataCollectionViewController {
 }
 
 
+// MARK: - Buttons Action
+extension CoreDataCollectionViewController {
+    
+    @IBAction func selectButtonPressed(sender: AnyObject) {
+        isSelecting = !isSelecting
+        selectButton.title = ""
+        selectButton.title = isSelecting ? "Done" : "Select"
+        
+        navigationController?.setToolbarHidden(!isSelecting, animated: true)
+        
+        if isSelecting {
+            performAnimation {
+                self.newAlbumButton?.alpha = 0
+            }
+        } else {
+            deselectCell()
+            resetToolbar()
+            photosSelected = 0
+            performAnimation {
+                self.newAlbumButton?.alpha = 1
+            }
+        }
+        
+        collectionView?.allowsMultipleSelection = isSelecting
+    }
+    
+    @IBAction func trashButtonPressed(sender: AnyObject) {
+        
+    }
+    
+    func quitSelectingState() {
+        isSelecting = false
+        selectButton.title = "Select"
+        navigationController?.setToolbarHidden(true, animated: true)
+        resetToolbar()
+        photosSelected = 0
+    }
+    
+    func resetToolbar() {
+        infoLabel.text = "Tap photos to select"
+        trashButton.enabled = false
+    }
+    
+    func deselectCell() {
+        if let indexPaths = collectionView?.indexPathsForSelectedItems() {
+            for indexpath in indexPaths {
+                setCheckmarkImage(nil, forCellAtIndexPath: indexpath)
+                collectionView?.deselectItemAtIndexPath(indexpath, animated: false)
+            }
+        }
+    }
+    
+}
+
+
 // MARK: - Collection View Data Source
 extension CoreDataCollectionViewController {
     
@@ -118,10 +195,53 @@ extension CoreDataCollectionViewController {
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         if let count = fetchedResultsControllerForPhotos!.sections?[section].numberOfObjects {
+            if count > 0 {
+                selectButton.enabled = true
+            } else {
+                selectButton.enabled = false
+            }
             return count
         }
+        selectButton.enabled = false
         return 0
     }
+}
+
+
+// MARK: - Collection View Delegate
+extension CoreDataCollectionViewController {
+    
+    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        if isSelecting {
+            configureToolbarWithIndicator(true)
+            setCheckmarkImage(checkmarkImage, forCellAtIndexPath: indexPath)
+        }
+    }
+    
+    override func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+        if isSelecting {
+            configureToolbarWithIndicator(false)
+            setCheckmarkImage(nil, forCellAtIndexPath: indexPath)
+        }
+    }
+    
+    func setCheckmarkImage(image: UIImage?, forCellAtIndexPath indexPath: NSIndexPath) {
+        let selectedCell = collectionView?.cellForItemAtIndexPath(indexPath) as! VTCollectionViewCell
+        selectedCell.checkmarkImageView.image = image
+    }
+    
+    func configureToolbarWithIndicator(indicator: Bool) {
+        photosSelected += Bool(indicator) ? 1 : -1
+        
+        if photosSelected == 0 {
+            resetToolbar()
+        } else {
+            let photoString = photosSelected == 1 ? "photo" : "photos"
+            infoLabel.text = "\(photosSelected) \(photoString) selected"
+            trashButton.enabled = true
+        }
+    }
+    
 }
 
 
