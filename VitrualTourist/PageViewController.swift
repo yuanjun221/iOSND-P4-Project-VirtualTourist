@@ -8,6 +8,7 @@
 
 import UIKit
 
+// MARK: - Properties
 class PageViewController: UIPageViewController {
 
     var photos: [Photo]!
@@ -15,36 +16,21 @@ class PageViewController: UIPageViewController {
 }
 
 
+// MARK: - View Life Cycle
 extension PageViewController {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         dataSource = self
         
         if let zoomedPhotoViewController = zoomedPhotoViewControllerForPage(currentIndex) {
             setViewControllers([zoomedPhotoViewController], direction: .Forward, animated: false, completion: nil)
         }
-    
-    }
-    
-    func zoomedPhotoViewControllerForPage(index: Int) -> ZoomedPhotoViewController? {
-        if let pageVC = storyboard?.instantiateViewControllerWithIdentifier("zoomedPhotoViewController") as? ZoomedPhotoViewController {
-            let photo = photos[index]
-            pageVC.photo = photo
-            pageVC.index = index
-            
-            let predicate = NSPredicate(format: "self == %@", photo)
-            let sortDescriptor = NSSortDescriptor(key: "owner", ascending: true)
-            let fetchedResultsControllerForPhoto = fetchedResultsController(entityName: "Photo", predicate: predicate, sortDescriptors: [sortDescriptor])
-            pageVC.fetchedResultsControllerForPhoto = fetchedResultsControllerForPhoto
-            
-            return pageVC
-        }
-        return nil
     }
 }
 
 
+// MARK: - Page View Controller Data Source
 extension PageViewController: UIPageViewControllerDataSource {
     
     func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController? {
@@ -80,5 +66,20 @@ extension PageViewController: UIPageViewControllerDataSource {
         }
         return nil
     }
+    
+    private func zoomedPhotoViewControllerForPage(index: Int) -> ZoomedPhotoViewController? {
+        if let pageVC = storyboard?.instantiateViewControllerWithIdentifier("zoomedPhotoViewController") as? ZoomedPhotoViewController {
+            let photo = photos[index]
+            pageVC.photo = photo
+            pageVC.index = index
+            
+            let predicate = NSPredicate(format: "self == %@", photo)
+            let sortDescriptor = NSSortDescriptor(key: "owner", ascending: true)
+            let fetchedResultsControllerForPhoto = fetchedResultsController(entityName: "Photo", predicate: predicate, sortDescriptors: [sortDescriptor])
+            pageVC.fetchedResultsControllerForPhoto = fetchedResultsControllerForPhoto
+            
+            return pageVC
+        }
+        return nil
+    }
 }
-

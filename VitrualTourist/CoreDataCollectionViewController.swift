@@ -13,9 +13,8 @@ import CoreData
 // MARK: - Properties
 class CoreDataCollectionViewController: UICollectionViewController {
     
-    @IBOutlet weak var selectButton: UIBarButtonItem!
-    @IBOutlet weak var infoLabelButton: UIBarButtonItem!
-    @IBOutlet weak var trashButton: UIBarButtonItem!
+    // Properties
+    var pin: Pin!
     
     var fetchedResultsControllerForPhotos: NSFetchedResultsController? {
         didSet {
@@ -31,9 +30,13 @@ class CoreDataCollectionViewController: UICollectionViewController {
         }
     }
     
-    var pin: Pin!
-        
+    private var isSelecting: Bool = false
+    private var photosSelected: Int = 0
     private var blockOperations = [NSBlockOperation]()
+    
+    var newAlbumButton: UIButton?
+    
+    private var infoLabel = UILabel(frame: CGRectZero)
     
     lazy private var activityIndicator: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
@@ -74,21 +77,21 @@ class CoreDataCollectionViewController: UICollectionViewController {
         return refreshControl
     }()
     
-    var newAlbumButton: UIButton?
-    
-    private var infoLabel = UILabel(frame: CGRectZero)
-    private var isSelecting: Bool = false
-    private var photosSelected: Int = 0
-    
     lazy var checkmarkImage: UIImage = {
         let checkmarkImage = UIImage(named: "Checkmark")!
         return checkmarkImage
     }()
+    
+    // Outlets
+    @IBOutlet weak var selectButton: UIBarButtonItem!
+    @IBOutlet weak var infoLabelButton: UIBarButtonItem!
+    @IBOutlet weak var trashButton: UIBarButtonItem!
 }
 
 
 // MARK: - View Life Cycle
 extension CoreDataCollectionViewController {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -135,7 +138,6 @@ extension CoreDataCollectionViewController {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-    
         if segue.identifier == "showPageView" {
             if let indexPath = (collectionView?.indexPathsForSelectedItems()![0]), let photos = fetchedResultsControllerForPhotos?.fetchedObjects as? [Photo], let pageViewController = segue.destinationViewController as? PageViewController {
                 pageViewController.photos = photos
@@ -146,7 +148,7 @@ extension CoreDataCollectionViewController {
 }
 
 
-// MARK: - Buttons Action
+// MARK: - Button Actions
 extension CoreDataCollectionViewController {
     
     @IBAction func selectButtonPressed(sender: AnyObject) {
@@ -176,7 +178,6 @@ extension CoreDataCollectionViewController {
     }
     
     @IBAction func trashButtonPressed(sender: AnyObject) {
-        
         let photoString = photosSelected == 1 ? "This photo" : "These photos"
         let alertTitle = "\(photoString) will be removed from the album."
         
@@ -200,7 +201,7 @@ extension CoreDataCollectionViewController {
         
     }
     
-    func quitSelectingState() {
+    private func quitSelectingState() {
         isSelecting = false
         selectButton.title = "Select"
         
@@ -213,12 +214,12 @@ extension CoreDataCollectionViewController {
         }
     }
     
-    func resetToolbar() {
+    private func resetToolbar() {
         infoLabel.text = "Tap photos to select"
         trashButton.enabled = false
     }
     
-    func deselectCell() {
+    private func deselectCell() {
         if let indexPaths = collectionView?.indexPathsForSelectedItems() {
             for indexPath in indexPaths {
                 setCheckmarkImage(nil, forCellAtIndexPath: indexPath)
@@ -227,7 +228,7 @@ extension CoreDataCollectionViewController {
         }
     }
     
-    func deleteSelectedPhotos() {
+    private func deleteSelectedPhotos() {
         if let indexPaths = collectionView?.indexPathsForSelectedItems(), context = fetchedResultsControllerForPhotos?.managedObjectContext {
             for indexPath in indexPaths {
                 let photo = fetchedResultsControllerForPhotos?.objectAtIndexPath(indexPath) as! Photo
@@ -249,7 +250,6 @@ extension CoreDataCollectionViewController {
     }
     
     override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
         if let count = fetchedResultsControllerForPhotos!.sections?[section].numberOfObjects {
             if count > 0 {
                 selectButton.enabled = true
@@ -283,14 +283,14 @@ extension CoreDataCollectionViewController {
         }
     }
     
-    func setCheckmarkImage(image: UIImage?, forCellAtIndexPath indexPath: NSIndexPath) {
+    private func setCheckmarkImage(image: UIImage?, forCellAtIndexPath indexPath: NSIndexPath) {
         if let selectedCell = collectionView?.cellForItemAtIndexPath(indexPath) as? VTCollectionViewCell {
             selectedCell.checkmarkImageView.image = image
         }
         
     }
     
-    func configureToolbarWithIndicator(indicator: Bool) {
+    private func configureToolbarWithIndicator(indicator: Bool) {
         photosSelected += Bool(indicator) ? 1 : -1
         
         if photosSelected == 0 {
@@ -301,14 +301,13 @@ extension CoreDataCollectionViewController {
             trashButton.enabled = true
         }
     }
-    
 }
 
 
 // MARK: - Fetches
 extension CoreDataCollectionViewController {
     
-    func executeSearchPhotos(){
+    private func executeSearchPhotos(){
         if let fc = fetchedResultsControllerForPhotos {
             do {
                 try fc.performFetch()
@@ -318,7 +317,7 @@ extension CoreDataCollectionViewController {
         }
     }
     
-    func executeSearchPin() {
+    private func executeSearchPin() {
         if let fc = fetchedResultsControllerForPin {
             do {
                 try fc.performFetch()

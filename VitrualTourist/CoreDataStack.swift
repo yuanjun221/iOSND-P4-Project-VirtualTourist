@@ -8,9 +8,11 @@
 
 import CoreData
 
+
+// MARK: - Properties & Initializers
 struct CoreDataStack {
     
-    // MARK:  - Properties
+    // MARK: Properties
     private let model : NSManagedObjectModel
     private let coordinator : NSPersistentStoreCoordinator
     private let modelURL : NSURL
@@ -19,7 +21,7 @@ struct CoreDataStack {
     private let backgroundContext : NSManagedObjectContext
     let context : NSManagedObjectContext
     
-    // MARK:  - Initializers
+    // MARK: Initializers
     init?(modelName: String){
         
         // Assumes the model is in the main bundle
@@ -71,7 +73,7 @@ struct CoreDataStack {
         }
     }
     
-    // MARK:  - Utils
+    // MARK: Utils
     func addStoreCoordinator(storeType: String,
                              configuration: String?,
                              storeURL: NSURL,
@@ -82,7 +84,7 @@ struct CoreDataStack {
 }
 
 
-// MARK:  - Removing data
+// MARK: - Removing data
 extension CoreDataStack  {
     
     func dropAllData() throws{
@@ -95,7 +97,7 @@ extension CoreDataStack  {
 }
 
 
-// MARK:  - Batch processing in the background
+// MARK: - Batch processing in the background
 extension CoreDataStack{
     typealias Batch = (workerContext: NSManagedObjectContext) -> ()
     
@@ -116,7 +118,7 @@ extension CoreDataStack{
 }
 
 
-// MARK:  - Save
+// MARK: - Save
 extension CoreDataStack {
     
     func save() {

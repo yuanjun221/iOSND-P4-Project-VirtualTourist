@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 
+
 class VTMKPinAnnotationView: MKPinAnnotationView {
     
     var dragged: Bool = false

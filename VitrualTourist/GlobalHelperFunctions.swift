@@ -1,5 +1,5 @@
 //
-//  GeneralFunctions.swift
+//  GlobalHelperFunctions.swift
 //  VitrualTourist
 //
 //  Created by Jun.Yuan on 16/8/11.
@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import CoreData
+
 
 var coreDataStack: CoreDataStack = {
     return (UIApplication.sharedApplication().delegate as! AppDelegate).coreDataStack

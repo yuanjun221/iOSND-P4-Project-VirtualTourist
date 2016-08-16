@@ -12,8 +12,8 @@ import CoreData
 
 class Photo: NSManagedObject {
     
+    // MARK: - Convenience Initializer
     convenience init(context: NSManagedObjectContext, dictionary:[String: AnyObject]) {
-        
         if let entity = NSEntityDescription.entityForName("Photo", inManagedObjectContext: context) {
             self.init(entity: entity, insertIntoManagedObjectContext: context)
             title = (dictionary[VTClient.ResponseKeys.Title] as! String)
@@ -33,6 +33,7 @@ class Photo: NSManagedObject {
         }
     }
     
+    // MARK: - Generate Photos Array
     static func photosFromResults(context: NSManagedObjectContext, results: [[String: AnyObject]]) -> [Photo] {
         var photos = [Photo]()
         
@@ -42,5 +43,4 @@ class Photo: NSManagedObject {
         
         return photos
     }
-    
 }

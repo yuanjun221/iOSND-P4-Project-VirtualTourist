@@ -13,17 +13,21 @@ import CoreData
 
 // MARK: - Properties
 class PhotoAlbumViewController: CoreDataCollectionViewController {
-
-    @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     
-    private var imageCache = NSCache()
-    
+    // MARK: Properties
     lazy private var mapRegion: MKCoordinateRegion = {
         let centerCoordinate = CLLocationCoordinate2DMake(Double(self.pin.latitude!), Double(self.pin.longitude!))
         let coordinateSpan = MKCoordinateSpanMake(Double(self.pin.latitudeDelta!) * 0.28, Double(self.pin.longitudeDelta!) * 0.28)
         let region = MKCoordinateRegionMake(centerCoordinate, coordinateSpan)
         return region
     }()
+    
+    lazy private var imageCache: NSCache = {
+       return NSCache()
+    }()
+    
+    // MARK: Outlets
+    @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
 }
 
 
@@ -40,8 +44,8 @@ extension PhotoAlbumViewController {
 
 // MARK: - Collection View Delegate Flow Layout
 extension PhotoAlbumViewController: UICollectionViewDelegateFlowLayout{
+    
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        
         return getCellSize()
     }
     
@@ -71,7 +75,6 @@ extension PhotoAlbumViewController: UICollectionViewDelegateFlowLayout{
             dimension = (width - 6.0) / 7.0
             size = CGSizeMake(dimension, dimension)
         }
-        
         return size
     }
 }
@@ -82,13 +85,10 @@ extension PhotoAlbumViewController {
     
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("photoCell", forIndexPath: indexPath) as! VTCollectionViewCell
-        
         let photo = fetchedResultsControllerForPhotos!.objectAtIndexPath(indexPath) as! Photo
-        
         cell.urlString = photo.imageURL!
         
         populateImage(WithPhoto: photo, ForCell: cell)
-
         return cell
     }
     
@@ -98,6 +98,7 @@ extension PhotoAlbumViewController {
             let headerView = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "header", forIndexPath: indexPath) as! VTCollectionReusableHeaderView
             setMapViewAnnotation(ForMapView: headerView.mapView)
             return headerView
+            
         case UICollectionElementKindSectionFooter:
             let footerView = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "footer", forIndexPath: indexPath) as! VTCollectionReusableFooterView
             let newAlbumButton = footerView.newAlbumButton
@@ -108,14 +109,14 @@ extension PhotoAlbumViewController {
             }
             
             self.newAlbumButton = newAlbumButton
-            
             return footerView
+            
         default:
             assert(false, "Unexpected element kind")
         }
     }
     
-    func setMapViewAnnotation(ForMapView mapView: MKMapView) {
+    private func setMapViewAnnotation(ForMapView mapView: MKMapView) {
         if mapView.annotations.isEmpty {
             let annotation = MKPointAnnotation()
             let coordinate = CLLocationCoordinate2D(latitude: Double(pin.latitude!), longitude: Double(pin.longitude!))
@@ -129,11 +130,10 @@ extension PhotoAlbumViewController {
 }
 
 
-// MARK: - Image Fetching
+// MARK: - Load Image For Cell
 extension PhotoAlbumViewController {
     
-    func populateImage(WithPhoto photo: Photo, ForCell cell: VTCollectionViewCell) {
-
+    private func populateImage(WithPhoto photo: Photo, ForCell cell: VTCollectionViewCell) {
         cell.imageView.image = UIImage(named: "placeholder")
         if cell.selected {
             cell.checkmarkImageView.image = checkmarkImage
@@ -153,11 +153,9 @@ extension PhotoAlbumViewController {
                 print("No image returned from existed imageData in photo \(photo)")
                 return
             }
-            
             setImage(image, WithPhoto: photo, ForCell: cell)
             
         } else {
-            
             downloadImageDataForPhoto(photo) {
                 
                 guard let imageData = photo.imageData else {
@@ -177,8 +175,7 @@ extension PhotoAlbumViewController {
         }
     }
     
-    func setImage(image: UIImage, WithPhoto photo: Photo, ForCell cell: VTCollectionViewCell) {
-        
+    private func setImage(image: UIImage, WithPhoto photo: Photo, ForCell cell: VTCollectionViewCell) {
         if let imageURLString = photo.imageURL {
             if cell.urlString == imageURLString {
                 cell.imageView.image = image

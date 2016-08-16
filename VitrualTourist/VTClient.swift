@@ -8,6 +8,7 @@
 
 import Foundation
 
+
 // MARK: - Properties
 class VTClient: NSObject {
     
@@ -34,9 +35,7 @@ extension VTClient {
     
     // MARK: GET Method
     func taskForGETMethod(WithParameters parameters: [String: AnyObject], completionHandlerForGET: (result: AnyObject!, error: NSError?) -> Void) -> NSURLSessionDataTask {
-        
         let request = NSMutableURLRequest(URL: URLFromParameters(parameters))
-        
         let task = session.dataTaskWithRequest(request) { (data, response, error) in
             
             func sendError(errorMessage: String) {
@@ -69,7 +68,6 @@ extension VTClient {
     // MARK: GET Image Data
     func taskForGETImageData(url: NSURL, completionHandlerForGETImageData: (imageData: NSData?, error: NSError?) -> Void) -> NSURLSessionTask {
         let request = NSURLRequest(URL: url)
-        
         let task = session.dataTaskWithRequest(request) { (data, response, error) in
             func sendError(error: String) {
                 let error = NSError(domain: "taskForGETImageData", code: 1, userInfo: [NSLocalizedDescriptionKey : error])
@@ -102,6 +100,7 @@ extension VTClient {
 
 // MARK: - Helper Methods
 extension VTClient {
+    
     private func URLFromParameters(parameters: [String: AnyObject]) -> NSURL {
         let components = NSURLComponents()
         components.scheme = Constants.ApiScheme

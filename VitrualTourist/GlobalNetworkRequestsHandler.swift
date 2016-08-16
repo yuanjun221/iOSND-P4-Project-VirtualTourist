@@ -1,5 +1,5 @@
 //
-//  ReusableMethods.swift
+//  GlobalNetworkRequestsHandler.swift
 //  VitrualTourist
 //
 //  Created by Jun.Yuan on 16/8/7.
@@ -10,10 +10,11 @@ import CoreData
 import Foundation
 import UIKit
 
+
+// MARK: - Global Network Requests Handler
 extension UIViewController {
     
     func downloadPhotosBackgroundForPin(pin: Pin) {
-        
         guard let context = pin.managedObjectContext else {
             print("Abort fetching photos for 'Pin \(pin)'. Managed object has been deleted from its context.")
             return
@@ -28,7 +29,6 @@ extension UIViewController {
     }
     
     private func getPhotosModelWithPin(context:NSManagedObjectContext, pin: Pin, completionHandler:(() -> Void)?) {
-        
         VTClient.sharedInstance().getPhotosModelWithPin(context, pin: pin) { (result, error) in
             
             if let error = error {
@@ -69,7 +69,6 @@ extension UIViewController {
     }
     
     func downloadImageDataForPhoto(photo: Photo, completionHandler:(() -> Void)?) {
-        
         guard let context = photo.managedObjectContext else {
             print("Abort downloading data for 'Photo \(photo)'. Managed object has been deleted from its context.")
             return

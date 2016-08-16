@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class VTCollectionReusableFooterView: UICollectionReusableView {
     
     @IBOutlet weak var newAlbumButton: UIButton!

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BF05A6311D5C6EF50097665A /* GeneralFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF05A6301D5C6EF50097665A /* GeneralFunctions.swift */; };
+		BF05A6311D5C6EF50097665A /* GlobalHelperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF05A6301D5C6EF50097665A /* GlobalHelperFunctions.swift */; };
 		BF05A6351D5CC8030097665A /* VTCollectionReusableFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF05A6341D5CC8030097665A /* VTCollectionReusableFooterView.swift */; };
 		BF206FB31D5323D8001B4BC9 /* VTCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF206FB21D5323D8001B4BC9 /* VTCollectionViewCell.swift */; };
 		BF206FB51D533489001B4BC9 /* VTCollectionReusableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF206FB41D533489001B4BC9 /* VTCollectionReusableHeaderView.swift */; };
@@ -24,7 +24,7 @@
 		BF967C301D5F740500F0C964 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF967C2F1D5F740500F0C964 /* CoreDataStack.swift */; };
 		BF967C341D6216B800F0C964 /* ZoomedPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF967C331D6216B800F0C964 /* ZoomedPhotoViewController.swift */; };
 		BF967C361D62C77B00F0C964 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF967C351D62C77B00F0C964 /* PageViewController.swift */; };
-		BFA2463C1D573C7200BD6020 /* NetworkRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2463B1D573C7200BD6020 /* NetworkRequests.swift */; };
+		BFA2463C1D573C7200BD6020 /* GlobalNetworkRequestsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2463B1D573C7200BD6020 /* GlobalNetworkRequestsHandler.swift */; };
 		BFA2463E1D58225100BD6020 /* Pin+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2463D1D58225100BD6020 /* Pin+CoreDataProperties.swift */; };
 		BFA246421D586ED100BD6020 /* CoreDataCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA246411D586ED100BD6020 /* CoreDataCollectionViewController.swift */; };
 		BFC0C51D1D4B63DB00631AB7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFC0C51C1D4B63DB00631AB7 /* AppDelegate.swift */; };
@@ -36,7 +36,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		BF05A6301D5C6EF50097665A /* GeneralFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralFunctions.swift; sourceTree = "<group>"; };
+		BF05A6301D5C6EF50097665A /* GlobalHelperFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalHelperFunctions.swift; sourceTree = "<group>"; };
 		BF05A6341D5CC8030097665A /* VTCollectionReusableFooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VTCollectionReusableFooterView.swift; sourceTree = "<group>"; };
 		BF206FB21D5323D8001B4BC9 /* VTCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VTCollectionViewCell.swift; sourceTree = "<group>"; };
 		BF206FB41D533489001B4BC9 /* VTCollectionReusableHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VTCollectionReusableHeaderView.swift; sourceTree = "<group>"; };
@@ -53,7 +53,7 @@
 		BF967C2F1D5F740500F0C964 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		BF967C331D6216B800F0C964 /* ZoomedPhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomedPhotoViewController.swift; sourceTree = "<group>"; };
 		BF967C351D62C77B00F0C964 /* PageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
-		BFA2463B1D573C7200BD6020 /* NetworkRequests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkRequests.swift; sourceTree = "<group>"; };
+		BFA2463B1D573C7200BD6020 /* GlobalNetworkRequestsHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalNetworkRequestsHandler.swift; sourceTree = "<group>"; };
 		BFA2463D1D58225100BD6020 /* Pin+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Pin+CoreDataProperties.swift"; path = "../Pin+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		BFA246411D586ED100BD6020 /* CoreDataCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataCollectionViewController.swift; sourceTree = "<group>"; };
 		BFC0C5191D4B63DB00631AB7 /* VitrualTourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VitrualTourist.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -81,8 +81,7 @@
 		BF05A6321D5C71AD0097665A /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				BFC0C51C1D4B63DB00631AB7 /* AppDelegate.swift */,
-				BF05A6301D5C6EF50097665A /* GeneralFunctions.swift */,
+				BF05A6301D5C6EF50097665A /* GlobalHelperFunctions.swift */,
 				BFC0C5251D4B63DB00631AB7 /* LaunchScreen.storyboard */,
 				BFC0C5201D4B63DB00631AB7 /* Main.storyboard */,
 				BFC0C5231D4B63DB00631AB7 /* Assets.xcassets */,
@@ -125,12 +124,13 @@
 		BF33B8C51D4F26BF00DE432D /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				BFC0C51C1D4B63DB00631AB7 /* AppDelegate.swift */,
 				BFC0C51E1D4B63DB00631AB7 /* MapViewController.swift */,
 				BFA246411D586ED100BD6020 /* CoreDataCollectionViewController.swift */,
 				BFF0FCA41D50A2AF00A1E46E /* PhotoAlbumViewController.swift */,
 				BF967C351D62C77B00F0C964 /* PageViewController.swift */,
 				BF967C331D6216B800F0C964 /* ZoomedPhotoViewController.swift */,
-				BFA2463B1D573C7200BD6020 /* NetworkRequests.swift */,
+				BFA2463B1D573C7200BD6020 /* GlobalNetworkRequestsHandler.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -264,7 +264,7 @@
 				BFC0C51F1D4B63DB00631AB7 /* MapViewController.swift in Sources */,
 				BF206FB31D5323D8001B4BC9 /* VTCollectionViewCell.swift in Sources */,
 				BFA2463E1D58225100BD6020 /* Pin+CoreDataProperties.swift in Sources */,
-				BFA2463C1D573C7200BD6020 /* NetworkRequests.swift in Sources */,
+				BFA2463C1D573C7200BD6020 /* GlobalNetworkRequestsHandler.swift in Sources */,
 				BFA246421D586ED100BD6020 /* CoreDataCollectionViewController.swift in Sources */,
 				BF967C361D62C77B00F0C964 /* PageViewController.swift in Sources */,
 				BFF0FCA51D50A2AF00A1E46E /* PhotoAlbumViewController.swift in Sources */,
@@ -272,7 +272,7 @@
 				BF967C341D6216B800F0C964 /* ZoomedPhotoViewController.swift in Sources */,
 				BF967C301D5F740500F0C964 /* CoreDataStack.swift in Sources */,
 				BF33B8B91D4C7E5E00DE432D /* VirtualTourist.xcdatamodeld in Sources */,
-				BF05A6311D5C6EF50097665A /* GeneralFunctions.swift in Sources */,
+				BF05A6311D5C6EF50097665A /* GlobalHelperFunctions.swift in Sources */,
 				BF33B8C21D4F0B7000DE432D /* Photo+CoreDataProperties.swift in Sources */,
 				BF206FDA1D548A72001B4BC9 /* VTConvenience.swift in Sources */,
 			);

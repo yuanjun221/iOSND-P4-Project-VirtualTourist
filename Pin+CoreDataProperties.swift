@@ -22,5 +22,4 @@ extension Pin {
     @NSManaged var latitudeDelta: NSNumber?
     @NSManaged var longitudeDelta: NSNumber?
     @NSManaged var photos: NSOrderedSet?
-
 }

@@ -12,6 +12,7 @@ import CoreData
 
 class Pin: NSManagedObject {
     
+    // MARK: - Convenience Initializer
     convenience init(context: NSManagedObjectContext, latitude: Double, longitude: Double, latitudeDelta: Double, longitudeDelta: Double) {
         if let entity = NSEntityDescription.entityForName("Pin", inManagedObjectContext: context) {
             self.init(entity: entity, insertIntoManagedObjectContext: context)
@@ -25,5 +26,4 @@ class Pin: NSManagedObject {
             fatalError("Unable to find Entity name 'Pin'!")
         }
     }
-
 }

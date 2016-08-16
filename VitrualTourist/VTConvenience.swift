@@ -39,7 +39,6 @@ extension VTClient {
     }
     
     func getRandomPageWithLocation(latitude: Double, longitude: Double, completionHandlerForRandomPage: (result: Int?, error: NSError?) -> Void) {
-        
         let parameters: [String: AnyObject] = [
             ParameterKeys.Method: Methods.SearchPhotos,
             ParameterKeys.ApiKey: ParameterValues.APIKey,
@@ -80,7 +79,6 @@ extension VTClient {
     }
     
     func getPhotosArray(latitude: Double, longitude: Double, page: Int, completionHandlerForPhotosArray: (result: [[String: AnyObject]]?, error: NSError?) -> Void) {
-        
         let parameters: [String: AnyObject] = [
             ParameterKeys.Method: Methods.SearchPhotos,
             ParameterKeys.ApiKey: ParameterValues.APIKey,

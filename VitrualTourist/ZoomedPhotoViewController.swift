@@ -9,10 +9,14 @@
 import UIKit
 import CoreData
 
+
+// MARK: - Properties
 class ZoomedPhotoViewController: UIViewController {
     
+    // MARK: Properties
     var photo: Photo!
     var index: Int!
+    
     var fetchedResultsControllerForPhoto: NSFetchedResultsController? {
         didSet {
             fetchedResultsControllerForPhoto?.delegate = self
@@ -20,12 +24,14 @@ class ZoomedPhotoViewController: UIViewController {
         }
     }
 
+    // MARK: Outlets
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var retryButton: UIButton!
     
+    // MARK: Constraints
     @IBOutlet weak var imageViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var imageViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var imageViewLeadingConstraint: NSLayoutConstraint!
@@ -33,6 +39,7 @@ class ZoomedPhotoViewController: UIViewController {
 }
 
 
+// MARK: - View Life Cycle
 extension ZoomedPhotoViewController {
     
     override func viewDidLoad() {
@@ -69,12 +76,6 @@ extension ZoomedPhotoViewController {
         }
     }
     
-//    override func viewDidLayoutSubviews() {
-//        super.viewDidLayoutSubviews()
-//        updateMinZoomScaleForSize(view.bounds.size)
-//        centerImageView()
-//    }
-    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         updateMinZoomScaleForSize(view.bounds.size)
@@ -89,6 +90,7 @@ extension ZoomedPhotoViewController {
 }
 
 
+// MARK: - Button Action
 extension ZoomedPhotoViewController {
     @IBAction func retryButtonPressed(sender: AnyObject) {
         performAnimation {
@@ -100,6 +102,7 @@ extension ZoomedPhotoViewController {
 }
 
 
+// MARK: - View Zooming Behavior
 extension ZoomedPhotoViewController {
     
     private func updateMinZoomScaleForSize(size: CGSize) {
@@ -143,6 +146,7 @@ extension ZoomedPhotoViewController {
 }
 
 
+// MARK: - Scroll View Delegate
 extension ZoomedPhotoViewController: UIScrollViewDelegate {
     
     func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
@@ -155,6 +159,7 @@ extension ZoomedPhotoViewController: UIScrollViewDelegate {
 }
 
 
+// MARK: - Fetch
 extension ZoomedPhotoViewController {
     
     func executeSearchPhoto(){
@@ -169,6 +174,7 @@ extension ZoomedPhotoViewController {
 }
 
 
+// MARK: - Fetched Results Controller Delegate
 extension ZoomedPhotoViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {

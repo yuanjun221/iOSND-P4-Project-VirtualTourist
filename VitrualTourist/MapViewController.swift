@@ -11,24 +11,13 @@ import MapKit
 import CoreData
 
 
-// MARK: View Controller Properties
+// MARK: Properties
 class MapViewController: UIViewController {
-
-    @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet weak var selectButton: UIBarButtonItem!
-    @IBOutlet weak var infoLabelButton: UIBarButtonItem!
-    @IBOutlet weak var trashButton: UIBarButtonItem!
     
-    lazy var coreDataStack: CoreDataStack = {
+    // MARK: - Properties
+    lazy private var coreDataStack: CoreDataStack = {
         return (UIApplication.sharedApplication().delegate as! AppDelegate).coreDataStack
     }()
-    
-    lazy var pins = [Pin]()
-    
-    private var infoLabel = UILabel(frame: CGRectZero)
-    private var isSelecting: Bool = false
-    private var pinsSelected: Int = 0
-    private var pinToBeDelivered: Pin!
     
     lazy private var fetchedResultsControllerForExistedPins: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: "Pin")
@@ -38,10 +27,23 @@ class MapViewController: UIViewController {
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.coreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
         return fetchedResultsController
     }()
+    
+    lazy private var pins = [Pin]()
+    
+    private var infoLabel = UILabel(frame: CGRectZero)
+    private var isSelecting: Bool = false
+    private var pinsSelected: Int = 0
+    private var pinToBeDelivered: Pin!
+    
+    // MARK: - Outlets
+    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var selectButton: UIBarButtonItem!
+    @IBOutlet weak var infoLabelButton: UIBarButtonItem!
+    @IBOutlet weak var trashButton: UIBarButtonItem!
 }
 
 
-// MARK: - View Controller Life Cycle
+// MARK: - View Life Cycle
 extension MapViewController {
     
     override func viewDidLoad() {
@@ -90,8 +92,6 @@ extension MapViewController {
             }
         }
     }
-    
-
     
     private func saveMapRegionToUserDefaults() {
         
@@ -151,7 +151,7 @@ extension MapViewController {
 }
 
 
-// MARK: - Buttons Action
+// MARK: - Button Actions
 extension MapViewController {
     
     @IBAction func selectButtonPressed(sender: AnyObject) {
@@ -191,7 +191,7 @@ extension MapViewController {
         
     }
     
-    func quitSelectingState() {
+    private func quitSelectingState() {
         isSelecting = false
         selectButton.title = ""
         selectButton.title = "Select"
@@ -200,7 +200,7 @@ extension MapViewController {
         pinsSelected = 0
     }
     
-    func enableDraggableForAnnotationView(enabled: Bool) {
+    private func enableDraggableForAnnotationView(enabled: Bool) {
         for annotation in mapView.annotations {
             
             let pinAnnotation = annotation as! VTMKPointAnnotation
@@ -212,7 +212,7 @@ extension MapViewController {
         }
     }
     
-    func deselectPins() {
+    private func deselectPins() {
         for annotation in mapView.annotations {
             
             let annotation = annotation as! VTMKPointAnnotation
@@ -230,7 +230,7 @@ extension MapViewController {
         }
     }
     
-    func resetToolbar() {
+    private func resetToolbar() {
         infoLabel.text = "Tap pins to select"
         trashButton.enabled = false
     }
@@ -241,7 +241,6 @@ extension MapViewController {
 extension MapViewController: MKMapViewDelegate {
     
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
-        
         let reuseId = "pin"
         var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? VTMKPinAnnotationView
         pinView?.pinTintColor = MKPinAnnotationView.redPinColor()
@@ -255,12 +254,10 @@ extension MapViewController: MKMapViewDelegate {
         }
         
         pinView!.draggable = (annotation as! VTMKPointAnnotation).draggable
-        
         return pinView
     }
     
     func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
-        
         let pinView = view as! VTMKPinAnnotationView
         let pinAnnotation = pinView.annotation as! VTMKPointAnnotation
         
@@ -283,24 +280,10 @@ extension MapViewController: MKMapViewDelegate {
                 self.performSegueWithIdentifier("pushPhotoAlbumView", sender: self)
             }
         }
-        
         mapView.deselectAnnotation(view.annotation, animated: false)
     }
     
-    func configureToolbarWithIndicator(indicator: Bool) {
-        pinsSelected += Bool(indicator) ? 1 : -1
-        
-        if pinsSelected == 0 {
-            resetToolbar()
-        } else {
-            let pinString = pinsSelected == 1 ? "pin" : "pins"
-            infoLabel.text = "\(pinsSelected) \(pinString) selected"
-            trashButton.enabled = true
-        }
-    }
-    
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, didChangeDragState newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
-        
         if !isSelecting {
             if newState == .Ending {
                 
@@ -322,13 +305,25 @@ extension MapViewController: MKMapViewDelegate {
             }
         }
     }
+    
+    private func configureToolbarWithIndicator(indicator: Bool) {
+        pinsSelected += Bool(indicator) ? 1 : -1
+        
+        if pinsSelected == 0 {
+            resetToolbar()
+        } else {
+            let pinString = pinsSelected == 1 ? "pin" : "pins"
+            infoLabel.text = "\(pinsSelected) \(pinString) selected"
+            trashButton.enabled = true
+        }
+    }
 }
 
 
 // MARK: - Data Model Manipulating
 extension MapViewController {
     
-    func executeSearchExistedPins() {
+    private func executeSearchExistedPins() {
         do {
             try fetchedResultsControllerForExistedPins.performFetch()
         } catch let error as NSError {
@@ -336,7 +331,7 @@ extension MapViewController {
         }
     }
     
-    func fetchPins(WithPredicate predicate: NSPredicate?, completionHandler: (results: [Pin]?) -> Void) {
+    private func fetchPins(WithPredicate predicate: NSPredicate?, completionHandler: (results: [Pin]?) -> Void) {
         let fetchRequest = NSFetchRequest(entityName: "Pin")
         fetchRequest.predicate = predicate
         
@@ -349,7 +344,7 @@ extension MapViewController {
         }
     }
     
-    func dropExistedPins() {
+    private func dropExistedPins() {
         executeSearchExistedPins()
         
         if let pins = fetchedResultsControllerForExistedPins.fetchedObjects as? [Pin] where fetchedResultsControllerForExistedPins.sections![0].numberOfObjects > 0 {
@@ -365,7 +360,7 @@ extension MapViewController {
         }
     }
     
-    func setPinsDeselected() {
+    private func setPinsDeselected() {
         let predicate = NSPredicate(format: "isSelected == %@", true)
         
         fetchPins(WithPredicate: predicate) { results in
@@ -379,7 +374,7 @@ extension MapViewController {
         }
     }
     
-    func deleteSelectedPins() {
+    private func deleteSelectedPins() {
         for annotation in mapView.annotations {
             let pinAnnotation = annotation as! VTMKPointAnnotation
             

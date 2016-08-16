@@ -22,5 +22,4 @@ extension Photo {
     @NSManaged var fetchImageDataTimedOut: NSNumber?
     
     @NSManaged var pin: Pin?
-
 }
