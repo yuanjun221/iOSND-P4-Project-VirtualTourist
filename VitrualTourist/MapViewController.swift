@@ -11,10 +11,10 @@ import MapKit
 import CoreData
 
 
-// MARK: Properties
+// MARK: - Properties
 class MapViewController: UIViewController {
     
-    // MARK: - Properties
+    // MARK: Properties
     lazy private var coreDataStack: CoreDataStack = {
         return (UIApplication.sharedApplication().delegate as! AppDelegate).coreDataStack
     }()
@@ -35,7 +35,7 @@ class MapViewController: UIViewController {
     private var pinsSelected: Int = 0
     private var pinToBeDelivered: Pin!
     
-    // MARK: - Outlets
+    // MARK: Outlets
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var selectButton: UIBarButtonItem!
     @IBOutlet weak var infoLabelButton: UIBarButtonItem!

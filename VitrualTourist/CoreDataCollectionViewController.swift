@@ -13,7 +13,7 @@ import CoreData
 // MARK: - Properties
 class CoreDataCollectionViewController: UICollectionViewController {
     
-    // Properties
+    // MARK: Properties
     var pin: Pin!
     
     var fetchedResultsControllerForPhotos: NSFetchedResultsController? {
@@ -82,7 +82,7 @@ class CoreDataCollectionViewController: UICollectionViewController {
         return checkmarkImage
     }()
     
-    // Outlets
+    // MARK: Outlets
     @IBOutlet weak var selectButton: UIBarButtonItem!
     @IBOutlet weak var infoLabelButton: UIBarButtonItem!
     @IBOutlet weak var trashButton: UIBarButtonItem!
