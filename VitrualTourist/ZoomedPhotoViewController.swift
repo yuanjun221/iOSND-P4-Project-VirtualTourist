@@ -55,6 +55,10 @@ extension ZoomedPhotoViewController {
 
         if let imageData = photo.imageData {
             if let image = UIImage(data: imageData) {
+                
+                let imageSize = image.size
+                imageView.bounds.size = imageSize
+                
                 imageView.image = image
                 activityIndicator.stopAnimating()
             }
@@ -65,15 +69,23 @@ extension ZoomedPhotoViewController {
         }
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//        updateMinZoomScaleForSize(view.bounds.size)
+//        centerImageView()
+//    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
         updateMinZoomScaleForSize(view.bounds.size)
+        centerImageView()
     }
     
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         updateMinZoomScaleForSize(view.bounds.size)
+        centerImageView()
+        view.layoutIfNeeded()
     }
-    
 }
 
 
@@ -108,8 +120,25 @@ extension ZoomedPhotoViewController {
         let xOffset = max(0, (size.width - imageView.frame.width) / 2)
         imageViewLeadingConstraint.constant = xOffset
         imageViewTrailingConstraint.constant = xOffset
+    }
+    
+    private func centerImageView() {
+        let bounds = scrollView.bounds.size
+        var frameToCenter = imageView.frame
         
-        view.layoutIfNeeded()
+        if frameToCenter.size.width < bounds.width {
+            frameToCenter.origin.x = (bounds.width - frameToCenter.size.width) / 2
+        } else {
+            frameToCenter.origin.x = 0
+        }
+        
+        if frameToCenter.height < bounds.height {
+            frameToCenter.origin.y = (bounds.height - frameToCenter.size.height) / 2
+        } else {
+            frameToCenter.origin.y = 0
+        }
+        
+        imageView.frame = frameToCenter
     }
 }
 
