@@ -17,7 +17,6 @@ extension Pin {
     @NSManaged var fetchPhotosTimedOut: NSNumber?
     @NSManaged var isSelected: NSNumber?
     @NSManaged var latitude: NSNumber?
-    @NSManaged var locationName: String?
     @NSManaged var longitude: NSNumber?
     @NSManaged var noPhoto: NSNumber?
     @NSManaged var latitudeDelta: NSNumber?

@@ -12,14 +12,13 @@ import CoreData
 
 class Pin: NSManagedObject {
     
-    convenience init(context: NSManagedObjectContext, latitude: Double, longitude: Double, latitudeDelta: Double, longitudeDelta: Double, locationName: String? = nil) {
+    convenience init(context: NSManagedObjectContext, latitude: Double, longitude: Double, latitudeDelta: Double, longitudeDelta: Double) {
         if let entity = NSEntityDescription.entityForName("Pin", inManagedObjectContext: context) {
             self.init(entity: entity, insertIntoManagedObjectContext: context)
             self.latitude = latitude
             self.longitude = longitude
             self.latitudeDelta = latitudeDelta
             self.longitudeDelta = longitudeDelta
-            self.locationName = locationName
             self.isSelected = false
             self.fetchPhotosTimedOut = false
         } else {

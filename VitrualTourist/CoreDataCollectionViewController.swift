@@ -121,9 +121,7 @@ extension CoreDataCollectionViewController {
             if Bool(noPhoto) {
                 updateUIForNoPhoto()
             } else if fetchedResultsControllerForPhotos?.sections![0].numberOfObjects == 0 {
-                performAnimation {
-                    self.newAlbumButton?.alpha = 1
-                }
+                downloadPhotos()
             }
         } else {
             activityIndicator.startAnimating()
@@ -394,6 +392,7 @@ extension CoreDataCollectionViewController: NSFetchedResultsControllerDelegate {
                 })
                 
             case .Update:
+                
                 blockOperations.append(NSBlockOperation {
                     self.collectionView?.reloadItemsAtIndexPaths([indexPath!])
                 })

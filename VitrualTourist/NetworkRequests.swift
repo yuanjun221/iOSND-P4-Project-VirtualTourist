@@ -86,6 +86,7 @@ extension UIViewController {
         VTClient.sharedInstance().taskForGETImageData(imageURL!) { (data, error) in
             if let error = error {
                 
+                photo.isDownloading = false
                 print("Error occurred when downloading image for 'Photo \(photo)' " + error.localizedDescription)
                 switch error.code {
                 case -1001:

@@ -69,7 +69,7 @@
             </objects>
             <point key="canvasLocation" x="253" y="339"/>
         </scene>
-        <!--Photo Album View Controller-->
+        <!--Album-->
         <scene sceneID="6uq-sB-jo5">
             <objects>
                 <collectionViewController id="ASj-iW-8D9" customClass="PhotoAlbumViewController" customModule="VitrualTourist" customModuleProvider="target" sceneMemberID="viewController">
@@ -146,6 +146,7 @@
                                         <constraint firstAttribute="height" constant="40" id="6Et-NY-iO3"/>
                                         <constraint firstAttribute="width" constant="92" id="L9y-Z1-yCO"/>
                                     </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <state key="normal" title="New Album">
                                         <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
@@ -174,7 +175,7 @@
                             </connections>
                         </barButtonItem>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" id="uz5-dA-Gg4">
+                    <navigationItem key="navigationItem" title="Album" id="uz5-dA-Gg4">
                         <barButtonItem key="backBarButtonItem" title=" " id="hBT-JI-WL7"/>
                         <barButtonItem key="rightBarButtonItem" title="Select" id="bCn-Yy-485">
                             <connections>
@@ -246,13 +247,29 @@
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FCJ-72-FBa">
+                                <rect key="frame" x="267" y="280" width="66" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="66" id="mY9-RB-Dzv"/>
+                                    <constraint firstAttribute="height" constant="40" id="wIJ-uc-Vwq"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <state key="normal" title="Retry">
+                                    <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="retryButtonPressed:" destination="peG-cZ-ilN" eventType="touchUpInside" id="sCv-uq-e0j"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="VB8-Lf-9zW" firstAttribute="top" secondItem="NZw-uq-yLR" secondAttribute="bottom" constant="-20" id="0lX-DD-68H"/>
+                            <constraint firstItem="FCJ-72-FBa" firstAttribute="centerY" secondItem="9yz-tA-smz" secondAttribute="centerY" id="5lR-rW-V6W"/>
                             <constraint firstItem="MrL-2R-uUn" firstAttribute="centerY" secondItem="9yz-tA-smz" secondAttribute="centerY" id="G3F-WX-OJb"/>
                             <constraint firstAttribute="trailing" secondItem="VB8-Lf-9zW" secondAttribute="trailing" id="JI5-Fg-yvI"/>
                             <constraint firstItem="PNx-qx-iGQ" firstAttribute="leading" secondItem="9yz-tA-smz" secondAttribute="leadingMargin" constant="2" id="K2B-oM-0q8"/>
+                            <constraint firstItem="FCJ-72-FBa" firstAttribute="centerX" secondItem="9yz-tA-smz" secondAttribute="centerX" id="OCz-C6-xFn"/>
                             <constraint firstAttribute="trailingMargin" secondItem="PNx-qx-iGQ" secondAttribute="trailing" constant="2" id="Sr6-D8-lpS"/>
                             <constraint firstItem="AuO-xs-Tuo" firstAttribute="top" secondItem="VB8-Lf-9zW" secondAttribute="bottom" id="moB-0j-l5j"/>
                             <constraint firstItem="AuO-xs-Tuo" firstAttribute="top" secondItem="PNx-qx-iGQ" secondAttribute="bottom" constant="24" id="qdq-9Y-hVE"/>
@@ -267,6 +284,7 @@
                         <outlet property="imageViewLeadingConstraint" destination="f0l-bP-lxP" id="MmQ-a6-rKa"/>
                         <outlet property="imageViewTopConstraint" destination="sRS-bs-Qfp" id="WF8-5u-mKW"/>
                         <outlet property="imageViewTrailingConstraint" destination="6FI-3V-NiO" id="CNM-2i-KJ3"/>
+                        <outlet property="retryButton" destination="FCJ-72-FBa" id="tcL-BV-7qG"/>
                         <outlet property="scrollView" destination="VB8-Lf-9zW" id="X43-FR-PtF"/>
                         <outlet property="titleLabel" destination="PNx-qx-iGQ" id="BwA-wf-ctt"/>
                     </connections>

@@ -24,7 +24,7 @@ class ZoomedPhotoViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var titleLabel: UILabel!
-    
+    @IBOutlet weak var retryButton: UIButton!
     
     @IBOutlet weak var imageViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var imageViewBottomConstraint: NSLayoutConstraint!
@@ -37,6 +37,11 @@ extension ZoomedPhotoViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        retryButton.layer.cornerRadius = 4.0
+        retryButton.layer.borderColor = UIColor.lightGrayColor().CGColor
+        retryButton.layer.borderWidth = 1.0
+        retryButton.alpha = 0
         
         if let title = photo.title {
             titleLabel.layer.shadowColor = UIColor.whiteColor().CGColor
@@ -53,6 +58,8 @@ extension ZoomedPhotoViewController {
                 imageView.image = image
                 activityIndicator.stopAnimating()
             }
+        } else if Bool(photo.fetchImageDataTimedOut!) {
+            retryButton.alpha = 1
         } else {
             activityIndicator.startAnimating()
         }
@@ -67,6 +74,17 @@ extension ZoomedPhotoViewController {
         updateMinZoomScaleForSize(view.bounds.size)
     }
     
+}
+
+
+extension ZoomedPhotoViewController {
+    @IBAction func retryButtonPressed(sender: AnyObject) {
+        performAnimation {
+            self.retryButton.alpha = 0
+        }
+        activityIndicator.startAnimating()
+        downloadImageDataForPhoto(photo, completionHandler: nil)
+    }
 }
 
 
@@ -125,10 +143,21 @@ extension ZoomedPhotoViewController {
 extension ZoomedPhotoViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        
         if let imageData = photo.imageData {
             if let image = UIImage(data: imageData) {
                 imageView.image = image
                 activityIndicator.stopAnimating()
+                if retryButton.alpha == 1 {
+                    performAnimation {
+                        self.retryButton.alpha = 0
+                    }
+                }
+            }
+        } else if Bool(photo.fetchImageDataTimedOut!) {
+            activityIndicator.stopAnimating()
+            performAnimation {
+                self.retryButton.alpha = 1
             }
         }
     }
