@@ -31,12 +31,6 @@ class CoreDataCollectionViewController: UICollectionViewController {
         }
     }
     
-    /*
-    lazy var coreDataStack: CoreDataStack = {
-        return (UIApplication.sharedApplication().delegate as! AppDelegate).coreDataStack
-    }()
-    */
-    
     var pin: Pin!
         
     private var blockOperations = [NSBlockOperation]()
@@ -90,7 +84,6 @@ class CoreDataCollectionViewController: UICollectionViewController {
         let checkmarkImage = UIImage(named: "Checkmark")!
         return checkmarkImage
     }()
- 
 }
 
 
@@ -121,6 +114,9 @@ extension CoreDataCollectionViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        refreshControl.endRefreshing()
+        refreshControl.removeFromSuperview()
+        
         if let noPhoto = pin.noPhoto {
             if Bool(noPhoto) {
                 updateUIForNoPhoto()
@@ -131,6 +127,22 @@ extension CoreDataCollectionViewController {
             }
         } else {
             activityIndicator.startAnimating()
+        }
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        collectionView?.addSubview(refreshControl)
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    
+        if segue.identifier == "showPageView" {
+            if let indexPath = (collectionView?.indexPathsForSelectedItems()![0]), let photos = fetchedResultsControllerForPhotos?.fetchedObjects as? [Photo], let pageViewController = segue.destinationViewController as? PageViewController {
+                pageViewController.photos = photos
+                pageViewController.currentIndex = indexPath.row
+            }
         }
     }
 }
@@ -261,6 +273,8 @@ extension CoreDataCollectionViewController {
         if isSelecting {
             configureToolbarWithIndicator(true)
             setCheckmarkImage(checkmarkImage, forCellAtIndexPath: indexPath)
+        } else {
+            performSegueWithIdentifier("showPageView", sender: self)
         }
     }
     

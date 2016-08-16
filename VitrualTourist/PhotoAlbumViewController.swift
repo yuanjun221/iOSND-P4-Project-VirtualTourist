@@ -20,7 +20,7 @@ class PhotoAlbumViewController: CoreDataCollectionViewController {
     
     lazy private var mapRegion: MKCoordinateRegion = {
         let centerCoordinate = CLLocationCoordinate2DMake(Double(self.pin.latitude!), Double(self.pin.longitude!))
-        let coordinateSpan = MKCoordinateSpanMake(Double(self.pin.latitudeDelta!) * 0.4, Double(self.pin.longitudeDelta!) * 0.4)
+        let coordinateSpan = MKCoordinateSpanMake(Double(self.pin.latitudeDelta!) * 0.28, Double(self.pin.longitudeDelta!) * 0.28)
         let region = MKCoordinateRegionMake(centerCoordinate, coordinateSpan)
         return region
     }()
@@ -29,9 +29,6 @@ class PhotoAlbumViewController: CoreDataCollectionViewController {
 
 // MARK: - View Life Cycle
 extension PhotoAlbumViewController {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
     
     override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         let size = getCellSize()

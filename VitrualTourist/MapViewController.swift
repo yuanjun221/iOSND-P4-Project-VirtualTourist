@@ -65,11 +65,6 @@ extension MapViewController {
         dropExistedPins()
     }
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
-    }
-    
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         saveMapRegionToUserDefaults()
@@ -96,13 +91,7 @@ extension MapViewController {
         }
     }
     
-    private func fetchedResultsController(entityName entityName: String, predicate: NSPredicate, sortDescriptors: [NSSortDescriptor]) -> NSFetchedResultsController {
-        let fetchRequest = NSFetchRequest(entityName: entityName)
-        fetchRequest.predicate = predicate
-        fetchRequest.sortDescriptors = sortDescriptors
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: coreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
-        return fetchedResultsController
-    }
+
     
     private func saveMapRegionToUserDefaults() {
         

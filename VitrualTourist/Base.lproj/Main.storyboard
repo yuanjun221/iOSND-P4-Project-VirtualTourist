@@ -175,6 +175,7 @@
                         </barButtonItem>
                     </toolbarItems>
                     <navigationItem key="navigationItem" id="uz5-dA-Gg4">
+                        <barButtonItem key="backBarButtonItem" title=" " id="hBT-JI-WL7"/>
                         <barButtonItem key="rightBarButtonItem" title="Select" id="bCn-Yy-485">
                             <connections>
                                 <action selector="selectButtonPressed:" destination="ASj-iW-8D9" id="ngv-xj-bnH"/>
@@ -186,11 +187,81 @@
                         <outlet property="infoLabelButton" destination="qnc-aA-6dh" id="8Zy-RI-KAJ"/>
                         <outlet property="selectButton" destination="bCn-Yy-485" id="scQ-Ey-R63"/>
                         <outlet property="trashButton" destination="m46-In-7ZS" id="dbA-1C-eEl"/>
+                        <segue destination="EW0-Ub-ExF" kind="show" identifier="showPageView" id="APZ-oo-ZRl"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="STA-hl-yCg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="947" y="339"/>
+        </scene>
+        <!--Page View Controller-->
+        <scene sceneID="PrP-wH-u7X">
+            <objects>
+                <pageViewController autoresizesArchivedViewToFullSize="NO" automaticallyAdjustsScrollViewInsets="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="EW0-Ub-ExF" customClass="PageViewController" customModule="VitrualTourist" customModuleProvider="target" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bAS-aJ-fPt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1633" y="339"/>
+        </scene>
+        <!--Zoomed Photo View Controller-->
+        <scene sceneID="PpV-k0-uhI">
+            <objects>
+                <viewController storyboardIdentifier="zoomedPhotoViewController" automaticallyAdjustsScrollViewInsets="NO" id="peG-cZ-ilN" customClass="ZoomedPhotoViewController" customModule="VitrualTourist" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="NZw-uq-yLR"/>
+                        <viewControllerLayoutGuide type="bottom" id="AuO-xs-Tuo"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="9yz-tA-smz">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="MrL-2R-uUn">
+                                <rect key="frame" x="290" y="290" width="20" height="20"/>
+                            </activityIndicatorView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VB8-Lf-9zW">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="OBF-qR-OPq">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="600" id="eBC-hz-ocs"/>
+                                            <constraint firstAttribute="width" constant="600" id="rzJ-id-PjH"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="OBF-qR-OPq" secondAttribute="bottom" id="2JN-BC-coT"/>
+                                    <constraint firstAttribute="trailing" secondItem="OBF-qR-OPq" secondAttribute="trailing" id="6FI-3V-NiO"/>
+                                    <constraint firstItem="OBF-qR-OPq" firstAttribute="leading" secondItem="VB8-Lf-9zW" secondAttribute="leading" id="f0l-bP-lxP"/>
+                                    <constraint firstItem="OBF-qR-OPq" firstAttribute="top" secondItem="VB8-Lf-9zW" secondAttribute="top" id="sRS-bs-Qfp"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="delegate" destination="peG-cZ-ilN" id="bYj-CF-KLy"/>
+                                </connections>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="VB8-Lf-9zW" firstAttribute="top" secondItem="NZw-uq-yLR" secondAttribute="bottom" constant="-20" id="0lX-DD-68H"/>
+                            <constraint firstItem="MrL-2R-uUn" firstAttribute="centerY" secondItem="9yz-tA-smz" secondAttribute="centerY" id="G3F-WX-OJb"/>
+                            <constraint firstAttribute="trailing" secondItem="VB8-Lf-9zW" secondAttribute="trailing" id="JI5-Fg-yvI"/>
+                            <constraint firstItem="AuO-xs-Tuo" firstAttribute="top" secondItem="VB8-Lf-9zW" secondAttribute="bottom" id="moB-0j-l5j"/>
+                            <constraint firstItem="VB8-Lf-9zW" firstAttribute="leading" secondItem="9yz-tA-smz" secondAttribute="leading" id="vLn-cB-ptU"/>
+                            <constraint firstItem="MrL-2R-uUn" firstAttribute="centerX" secondItem="9yz-tA-smz" secondAttribute="centerX" id="yHa-Zo-4f9"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="activityIndicator" destination="MrL-2R-uUn" id="ERN-bA-Ela"/>
+                        <outlet property="imageView" destination="OBF-qR-OPq" id="WR5-Ia-P6W"/>
+                        <outlet property="imageViewBottomConstraint" destination="2JN-BC-coT" id="QMM-lM-ASZ"/>
+                        <outlet property="imageViewLeadingConstraint" destination="f0l-bP-lxP" id="MmQ-a6-rKa"/>
+                        <outlet property="imageViewTopConstraint" destination="sRS-bs-Qfp" id="WF8-5u-mKW"/>
+                        <outlet property="imageViewTrailingConstraint" destination="6FI-3V-NiO" id="CNM-2i-KJ3"/>
+                        <outlet property="scrollView" destination="VB8-Lf-9zW" id="X43-FR-PtF"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="80o-ub-eeL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2329" y="339"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="kQQ-0K-kab">

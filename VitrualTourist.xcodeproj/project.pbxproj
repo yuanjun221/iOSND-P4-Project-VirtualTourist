@@ -22,6 +22,8 @@
 		BF33B8CA1D50758000DE432D /* VTMKPinAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF33B8C91D50758000DE432D /* VTMKPinAnnotationView.swift */; };
 		BF4849541D4C5F6000694CFE /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF4849531D4C5F6000694CFE /* MapKit.framework */; };
 		BF967C301D5F740500F0C964 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF967C2F1D5F740500F0C964 /* CoreDataStack.swift */; };
+		BF967C341D6216B800F0C964 /* ZoomedPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF967C331D6216B800F0C964 /* ZoomedPhotoViewController.swift */; };
+		BF967C361D62C77B00F0C964 /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF967C351D62C77B00F0C964 /* PageViewController.swift */; };
 		BFA2463C1D573C7200BD6020 /* NetworkRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2463B1D573C7200BD6020 /* NetworkRequests.swift */; };
 		BFA2463E1D58225100BD6020 /* Pin+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA2463D1D58225100BD6020 /* Pin+CoreDataProperties.swift */; };
 		BFA246421D586ED100BD6020 /* CoreDataCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFA246411D586ED100BD6020 /* CoreDataCollectionViewController.swift */; };
@@ -49,6 +51,8 @@
 		BF33B8C91D50758000DE432D /* VTMKPinAnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VTMKPinAnnotationView.swift; sourceTree = "<group>"; };
 		BF4849531D4C5F6000694CFE /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		BF967C2F1D5F740500F0C964 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		BF967C331D6216B800F0C964 /* ZoomedPhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZoomedPhotoViewController.swift; sourceTree = "<group>"; };
+		BF967C351D62C77B00F0C964 /* PageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		BFA2463B1D573C7200BD6020 /* NetworkRequests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkRequests.swift; sourceTree = "<group>"; };
 		BFA2463D1D58225100BD6020 /* Pin+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Pin+CoreDataProperties.swift"; path = "../Pin+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		BFA246411D586ED100BD6020 /* CoreDataCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataCollectionViewController.swift; sourceTree = "<group>"; };
@@ -124,6 +128,8 @@
 				BFC0C51E1D4B63DB00631AB7 /* MapViewController.swift */,
 				BFA246411D586ED100BD6020 /* CoreDataCollectionViewController.swift */,
 				BFF0FCA41D50A2AF00A1E46E /* PhotoAlbumViewController.swift */,
+				BF967C351D62C77B00F0C964 /* PageViewController.swift */,
+				BF967C331D6216B800F0C964 /* ZoomedPhotoViewController.swift */,
 				BFA2463B1D573C7200BD6020 /* NetworkRequests.swift */,
 			);
 			name = ViewController;
@@ -260,8 +266,10 @@
 				BFA2463E1D58225100BD6020 /* Pin+CoreDataProperties.swift in Sources */,
 				BFA2463C1D573C7200BD6020 /* NetworkRequests.swift in Sources */,
 				BFA246421D586ED100BD6020 /* CoreDataCollectionViewController.swift in Sources */,
+				BF967C361D62C77B00F0C964 /* PageViewController.swift in Sources */,
 				BFF0FCA51D50A2AF00A1E46E /* PhotoAlbumViewController.swift in Sources */,
 				BFC0C51D1D4B63DB00631AB7 /* AppDelegate.swift in Sources */,
+				BF967C341D6216B800F0C964 /* ZoomedPhotoViewController.swift in Sources */,
 				BF967C301D5F740500F0C964 /* CoreDataStack.swift in Sources */,
 				BF33B8B91D4C7E5E00DE432D /* VirtualTourist.xcdatamodeld in Sources */,
 				BF05A6311D5C6EF50097665A /* GeneralFunctions.swift in Sources */,

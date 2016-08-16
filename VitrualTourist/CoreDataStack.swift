@@ -16,9 +16,8 @@ struct CoreDataStack {
     private let modelURL : NSURL
     private let dbURL : NSURL
     private let persistingContext : NSManagedObjectContext
-    let backgroundContext : NSManagedObjectContext
+    private let backgroundContext : NSManagedObjectContext
     let context : NSManagedObjectContext
-    
     
     // MARK:  - Initializers
     init?(modelName: String){
@@ -36,9 +35,7 @@ struct CoreDataStack {
             return nil
         }
         self.model = model
-        
-        
-        
+
         // Create the store coordinator
         coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
         
@@ -81,7 +78,6 @@ struct CoreDataStack {
                              options : [NSObject : AnyObject]?) throws{
         
         try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: dbURL, options: nil)
-        
     }
 }
 
@@ -95,8 +91,6 @@ extension CoreDataStack  {
         try coordinator.destroyPersistentStoreAtURL(dbURL, withType:NSSQLiteStoreType , options: nil)
         
         try addStoreCoordinator(NSSQLiteStoreType, configuration: nil, storeURL: dbURL, options: nil)
-        
-        
     }
 }
 
@@ -157,7 +151,7 @@ extension CoreDataStack {
         if delayInSeconds > 0 {
             save()
             
-            print("autoSaving")
+            print("AutoSaving")
             
             let delayInNanoSeconds = UInt64(delayInSeconds) * NSEC_PER_SEC
             let time = dispatch_time(DISPATCH_TIME_NOW, Int64(delayInNanoSeconds))
@@ -169,4 +163,3 @@ extension CoreDataStack {
         }
     }
 }
-
