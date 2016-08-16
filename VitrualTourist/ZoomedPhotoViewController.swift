@@ -23,8 +23,9 @@ class ZoomedPhotoViewController: UIViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var titleLabel: UILabel!
     
-
+    
     @IBOutlet weak var imageViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var imageViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var imageViewLeadingConstraint: NSLayoutConstraint!
@@ -33,9 +34,20 @@ class ZoomedPhotoViewController: UIViewController {
 
 
 extension ZoomedPhotoViewController {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if let title = photo.title {
+            titleLabel.layer.shadowColor = UIColor.whiteColor().CGColor
+            titleLabel.layer.shadowOffset = CGSizeMake(0, 0)
+            titleLabel.layer.shadowRadius = 2.0
+            titleLabel.layer.shadowOpacity = 1.0
+            titleLabel.text = title
+        } else {
+            titleLabel.text = nil
+        }
+
         if let imageData = photo.imageData {
             if let image = UIImage(data: imageData) {
                 imageView.image = image
@@ -46,9 +58,12 @@ extension ZoomedPhotoViewController {
         }
     }
     
-    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        updateMinZoomScaleForSize(view.bounds.size)
+    }
+    
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
         updateMinZoomScaleForSize(view.bounds.size)
     }
     
@@ -110,7 +125,6 @@ extension ZoomedPhotoViewController {
 extension ZoomedPhotoViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
-        print(photo)
         if let imageData = photo.imageData {
             if let image = UIImage(data: imageData) {
                 imageView.image = image

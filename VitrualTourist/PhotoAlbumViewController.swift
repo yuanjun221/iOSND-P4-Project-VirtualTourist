@@ -134,8 +134,12 @@ extension PhotoAlbumViewController {
     
     func populateImage(WithPhoto photo: Photo, ForCell cell: VTCollectionViewCell) {
 
-        cell.imageView.image = nil
-        cell.checkmarkImageView.image = nil
+        cell.imageView.image = UIImage(named: "placeholder")
+        if cell.selected {
+            cell.checkmarkImageView.image = checkmarkImage
+        } else {
+            cell.checkmarkImageView.image = nil
+        }
         
         if let imageFromCache = imageCache.objectForKey(photo.imageURL!) as? UIImage {
             cell.imageView.image = imageFromCache

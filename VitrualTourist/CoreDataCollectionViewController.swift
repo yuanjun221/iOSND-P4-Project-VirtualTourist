@@ -80,7 +80,7 @@ class CoreDataCollectionViewController: UICollectionViewController {
     private var isSelecting: Bool = false
     private var photosSelected: Int = 0
     
-    lazy private var checkmarkImage: UIImage = {
+    lazy var checkmarkImage: UIImage = {
         let checkmarkImage = UIImage(named: "Checkmark")!
         return checkmarkImage
     }()
@@ -286,8 +286,10 @@ extension CoreDataCollectionViewController {
     }
     
     func setCheckmarkImage(image: UIImage?, forCellAtIndexPath indexPath: NSIndexPath) {
-        let selectedCell = collectionView?.cellForItemAtIndexPath(indexPath) as! VTCollectionViewCell
-        selectedCell.checkmarkImageView.image = image
+        if let selectedCell = collectionView?.cellForItemAtIndexPath(indexPath) as? VTCollectionViewCell {
+            selectedCell.checkmarkImageView.image = image
+        }
+        
     }
     
     func configureToolbarWithIndicator(indicator: Bool) {
