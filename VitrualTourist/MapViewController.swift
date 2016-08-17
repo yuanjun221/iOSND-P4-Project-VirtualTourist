@@ -285,8 +285,10 @@ extension MapViewController: MKMapViewDelegate {
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, didChangeDragState newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
         if !isSelecting {
-            if newState == .Ending {
-                let pinView = view as! VTMKPinAnnotationView
+            let pinView = view as! VTMKPinAnnotationView
+            
+            switch newState {
+            case .Ending:
                 pinView.dragged = true
                 
                 let annotation = pinView.annotation as! VTMKPointAnnotation
@@ -301,6 +303,10 @@ extension MapViewController: MKMapViewDelegate {
                 deleteCurrentPhotosForPin(pin)
                 
                 self.downloadPhotosBackgroundForPin(pin)
+            case .Canceling:
+                pinView.dragged = true
+            default:
+                break
             }
         }
     }
