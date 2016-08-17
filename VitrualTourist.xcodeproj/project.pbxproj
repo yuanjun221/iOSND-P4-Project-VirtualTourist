@@ -81,6 +81,7 @@
 		BF05A6321D5C71AD0097665A /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				BFA2463B1D573C7200BD6020 /* GlobalNetworkRequestsHandler.swift */,
 				BF05A6301D5C6EF50097665A /* GlobalHelperFunctions.swift */,
 				BFC0C5251D4B63DB00631AB7 /* LaunchScreen.storyboard */,
 				BFC0C5201D4B63DB00631AB7 /* Main.storyboard */,
@@ -130,7 +131,6 @@
 				BFF0FCA41D50A2AF00A1E46E /* PhotoAlbumViewController.swift */,
 				BF967C351D62C77B00F0C964 /* PageViewController.swift */,
 				BF967C331D6216B800F0C964 /* ZoomedPhotoViewController.swift */,
-				BFA2463B1D573C7200BD6020 /* GlobalNetworkRequestsHandler.swift */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";

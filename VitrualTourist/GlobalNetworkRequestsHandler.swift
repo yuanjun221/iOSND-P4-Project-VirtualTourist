@@ -15,38 +15,46 @@ import UIKit
 extension UIViewController {
     
     func downloadPhotosBackgroundForPin(pin: Pin) {
+        
         guard let context = pin.managedObjectContext else {
             print("Abort fetching photos for 'Pin \(pin)'. Managed object has been deleted from its context.")
             return
         }
         
         self.getPhotosModelWithPin(context, pin: pin) {
-            for photo in pin.photos! {
-                let photo = photo as! Photo
-                self.downloadImageDataForPhoto(photo, completionHandler: nil)
+            
+            context.performBlock {
+                for photo in pin.photos! {
+                    let photo = photo as! Photo
+                    self.downloadImageDataForPhoto(photo, completionHandler: nil)
+                }
             }
         }
+        
     }
     
     private func getPhotosModelWithPin(context:NSManagedObjectContext, pin: Pin, completionHandler:(() -> Void)?) {
+        
         VTClient.sharedInstance().getPhotosModelWithPin(context, pin: pin) { (result, error) in
             
             if let error = error {
                 print("Error occurred when getting Photos: " + error.localizedDescription)
-                                
-                switch error.code {
-                case -1001, -1009:
-                    pin.fetchPhotosTimedOut = true
-                    
-                case -3000:
-                    pin.noPhoto = true
-                    self.setFetchPhotosTimedOutForPin(pin)
-                    
-                default:
-                    self.setFetchPhotosTimedOutForPin(pin)
-                }
                 
-                context.processPendingChanges()
+                context.performBlockAndWait {
+                    switch error.code {
+                    case -1001, -1009:
+                        pin.fetchPhotosTimedOut = true
+                        
+                    case -3000:
+                        pin.noPhoto = true
+                        self.setFetchPhotosTimedOutForPin(pin)
+                        
+                    default:
+                        self.setFetchPhotosTimedOutForPin(pin)
+                    }
+                    
+                    context.processPendingChanges()
+                }
                 return
             }
             
@@ -55,13 +63,15 @@ extension UIViewController {
                 return
             }
             
-            pin.photos = NSOrderedSet(array: result!)
-            
-            self.setFetchPhotosTimedOutForPin(pin)
-            pin.noPhoto = false
-            
-            context.processPendingChanges()
-            
+            context.performBlockAndWait {
+                pin.photos = NSOrderedSet(array: result!)
+                
+                self.setFetchPhotosTimedOutForPin(pin)
+                pin.noPhoto = false
+                
+                context.processPendingChanges()
+            }
+
             if let completionHandler = completionHandler {
                 completionHandler()
             }
@@ -78,23 +88,30 @@ extension UIViewController {
             return
         }
         
-        photo.isDownloading = true
-
+        context.performBlockAndWait {
+            photo.isDownloading = true
+        }
+        
         let imageURL = NSURL(string: photo.imageURL!)
         
         VTClient.sharedInstance().taskForGETImageData(imageURL!) { (data, error) in
             if let error = error {
                 
-                photo.isDownloading = false
-                print("Error occurred when downloading image for 'Photo \(photo)' " + error.localizedDescription)
-                switch error.code {
-                case -1001:
-                    photo.fetchImageDataTimedOut = true
-                default:
-                    break
+                context.performBlockAndWait {
+                    photo.isDownloading = false
+                    print("Error occurred when downloading image for 'Photo \(photo)' " + error.localizedDescription)
+                    
+                    switch error.code {
+                    case -1001:
+                        photo.fetchImageDataTimedOut = true
+                        
+                    default:
+                        break
+                    }
+                    
+                    context.processPendingChanges()
                 }
 
-                context.processPendingChanges()
                 return
             }
             
@@ -103,13 +120,15 @@ extension UIViewController {
                 return
             }
             
-            photo.imageData = data!
-            photo.isDownloading = false
-            if Bool(photo.fetchImageDataTimedOut!) {
-                photo.fetchImageDataTimedOut = false
+            context.performBlockAndWait {
+                photo.imageData = data!
+                photo.isDownloading = false
+                if Bool(photo.fetchImageDataTimedOut!) {
+                    photo.fetchImageDataTimedOut = false
+                }
+                context.processPendingChanges()
             }
-            context.processPendingChanges()
-            
+
             if let completionHandler = completionHandler {
                 completionHandler()
             }

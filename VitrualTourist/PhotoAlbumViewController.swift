@@ -158,18 +158,22 @@ extension PhotoAlbumViewController {
         } else {
             downloadImageDataForPhoto(photo) {
                 
-                guard let imageData = photo.imageData else {
-                    print("No imageData in photo \(photo)")
-                    return
-                }
-                
-                guard let image = UIImage(data: imageData) else {
-                    print("No image returned from existed imageData in photo \(photo)")
-                    return
-                }
-                
-                performUIUpdatesOnMain() {
-                    self.setImage(image, WithPhoto: photo, ForCell: cell)
+                if let context = photo.managedObjectContext {
+                    context.performBlockAndWait {
+                        guard let imageData = photo.imageData else {
+                            print("No imageData in photo \(photo)")
+                            return
+                        }
+                        
+                        guard let image = UIImage(data: imageData) else {
+                            print("No image returned from existed imageData in photo \(photo)")
+                            return
+                        }
+                        
+                        performUIUpdatesOnMain() {
+                            self.setImage(image, WithPhoto: photo, ForCell: cell)
+                        }
+                    }
                 }
             }
         }
