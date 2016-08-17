@@ -45,6 +45,8 @@ extension ZoomedPhotoViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        imageView.image = nil
+        
         retryButton.layer.cornerRadius = 4.0
         retryButton.layer.borderColor = UIColor.lightGrayColor().CGColor
         retryButton.layer.borderWidth = 1.0
@@ -62,10 +64,9 @@ extension ZoomedPhotoViewController {
 
         if let imageData = photo.imageData {
             if let image = UIImage(data: imageData) {
-                
                 let imageSize = image.size
                 imageView.bounds.size = imageSize
-                
+                centerImageView()
                 imageView.image = image
                 activityIndicator.stopAnimating()
             }
@@ -181,6 +182,9 @@ extension ZoomedPhotoViewController: NSFetchedResultsControllerDelegate {
         
         if let imageData = photo.imageData {
             if let image = UIImage(data: imageData) {
+                let imageSize = image.size
+                imageView.bounds.size = imageSize
+                centerImageView()
                 imageView.image = image
                 activityIndicator.stopAnimating()
                 if retryButton.alpha == 1 {
