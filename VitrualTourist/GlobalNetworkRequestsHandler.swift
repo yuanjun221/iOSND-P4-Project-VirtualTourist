@@ -51,7 +51,7 @@ extension UIViewController {
             }
             
             if pin.fault {
-                print("Discard assign relationshiop photos to 'Pin \(pin.objectID)'. Managed object has been deleted from its context.")
+                print("Discard assigning relationshiop photos to 'Pin \(pin.objectID)'. Managed object has been deleted from its context.")
                 return
             }
             
@@ -99,7 +99,7 @@ extension UIViewController {
             }
             
             if photo.fault {
-                print("Discard downloaded image data for 'Photo \(photo.objectID)'. Managed object has been deleted from its context.")
+                print("Discard assigning image data to 'Photo \(photo.objectID)'. Managed object has been deleted from its context.")
                 return
             }
             

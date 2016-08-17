@@ -286,7 +286,6 @@ extension MapViewController: MKMapViewDelegate {
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, didChangeDragState newState: MKAnnotationViewDragState, fromOldState oldState: MKAnnotationViewDragState) {
         if !isSelecting {
             if newState == .Ending {
-                
                 let pinView = view as! VTMKPinAnnotationView
                 pinView.dragged = true
                 
@@ -299,7 +298,7 @@ extension MapViewController: MKMapViewDelegate {
                 pin.longitude = annotation.coordinate.longitude
                 pin.latitudeDelta = coordinateSpan.latitudeDelta
                 pin.longitudeDelta = coordinateSpan.longitudeDelta
-                pin.photos = nil
+                deleteCurrentPhotosForPin(pin)
                 
                 self.downloadPhotosBackgroundForPin(pin)
             }
@@ -315,6 +314,18 @@ extension MapViewController: MKMapViewDelegate {
             let pinString = pinsSelected == 1 ? "pin" : "pins"
             infoLabel.text = "\(pinsSelected) \(pinString) selected"
             trashButton.enabled = true
+        }
+    }
+    
+    private func deleteCurrentPhotosForPin(pin: Pin) {
+        if let context = pin.managedObjectContext, let photos = pin.photos {
+            if photos.count > 0 {
+                for photo in photos {
+                    let photo = photo as! Photo
+                    context.deleteObject(photo)
+                }
+                context.processPendingChanges()
+            }
         }
     }
 }
