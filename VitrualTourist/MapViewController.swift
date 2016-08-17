@@ -15,17 +15,17 @@ import CoreData
 class MapViewController: UIViewController {
     
     // MARK: Properties
-    lazy private var coreDataStack: CoreDataStack = {
-        return (UIApplication.sharedApplication().delegate as! AppDelegate).coreDataStack
-    }()
-    
-    lazy private var fetchedResultsControllerForExistedPins: NSFetchedResultsController = {
+    lazy private var fetchedResultsControllerForPins: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: "Pin")
         let sortDescriptor = NSSortDescriptor(key: "latitude", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
         
-        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.coreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: coreDataStack.context, sectionNameKeyPath: nil, cacheName: nil)
         return fetchedResultsController
+    }()
+    
+    lazy private var userDefaults: NSUserDefaults = {
+        return NSUserDefaults.standardUserDefaults()
     }()
     
     lazy private var pins = [Pin]()
@@ -62,8 +62,6 @@ extension MapViewController {
         trashButton.enabled = false
         
         setMapRegionFromUserDefaults()
-        
-        setPinsDeselected()
         dropExistedPins()
     }
     
@@ -94,9 +92,6 @@ extension MapViewController {
     }
     
     private func saveMapRegionToUserDefaults() {
-        
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        
         userDefaults.setBool(true, forKey: VTClient.UserDefaultsKeys.HasLaunchedBefore)
         userDefaults.setValue(mapView.centerCoordinate.latitude, forKey: VTClient.UserDefaultsKeys.Latitude)
         userDefaults.setValue(mapView.centerCoordinate.longitude, forKey: VTClient.UserDefaultsKeys.Longitude)
@@ -105,9 +100,6 @@ extension MapViewController {
     }
     
     private func setMapRegionFromUserDefaults() {
-        
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        
         if userDefaults.boolForKey(VTClient.UserDefaultsKeys.HasLaunchedBefore) {
             let latitude = userDefaults.doubleForKey(VTClient.UserDefaultsKeys.Latitude)
             let longitude = userDefaults.doubleForKey(VTClient.UserDefaultsKeys.Longitude)
@@ -133,7 +125,7 @@ extension MapViewController {
             let coordinate = self.mapView.convertPoint(point, toCoordinateFromView: mapView)
             let coordinateSpan = mapView.region.span
             
-            let pin = Pin(context:coreDataStack.context, latitude: coordinate.latitude, longitude: coordinate.longitude, latitudeDelta: coordinateSpan.latitudeDelta, longitudeDelta: coordinateSpan.longitudeDelta)
+            let pin = Pin(context:fetchedResultsControllerForPins.managedObjectContext, latitude: coordinate.latitude, longitude: coordinate.longitude, latitudeDelta: coordinateSpan.latitudeDelta, longitudeDelta: coordinateSpan.longitudeDelta)
             
             let annotaion = VTMKPointAnnotation()
             annotaion.coordinate = coordinate
@@ -181,7 +173,6 @@ extension MapViewController {
             if self.mapView.annotations.isEmpty {
                 self.selectButton.enabled = false
             }
-            
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
         
@@ -342,30 +333,21 @@ extension MapViewController {
     
     private func executeSearchExistedPins() {
         do {
-            try fetchedResultsControllerForExistedPins.performFetch()
+            try fetchedResultsControllerForPins.performFetch()
         } catch let error as NSError {
             print("Error while trying to perform a search: " + error.localizedDescription)
-        }
-    }
-    
-    private func fetchPins(WithPredicate predicate: NSPredicate?, completionHandler: (results: [Pin]?) -> Void) {
-        let fetchRequest = NSFetchRequest(entityName: "Pin")
-        fetchRequest.predicate = predicate
-        
-        do {
-            let results = try coreDataStack.context.executeFetchRequest(fetchRequest) as! [Pin]
-            completionHandler(results: results)
-        } catch let error as NSError {
-            completionHandler(results: nil)
-            print("Could not fetch \(error), \(error.userInfo)")
         }
     }
     
     private func dropExistedPins() {
         executeSearchExistedPins()
         
-        if let pins = fetchedResultsControllerForExistedPins.fetchedObjects as? [Pin] where fetchedResultsControllerForExistedPins.sections![0].numberOfObjects > 0 {
+        if let pins = fetchedResultsControllerForPins.fetchedObjects as? [Pin] where fetchedResultsControllerForPins.sections![0].numberOfObjects > 0 {
             for pin in pins {
+                if Bool(pin.isSelected!) {
+                    pin.isSelected = false
+                }
+                
                 let annotation = VTMKPointAnnotation()
                 let coordinate = CLLocationCoordinate2D(latitude: Double(pin.latitude!), longitude: Double(pin.longitude!))
                 annotation.coordinate = coordinate
@@ -374,20 +356,6 @@ extension MapViewController {
             }
         } else {
             selectButton.enabled = false
-        }
-    }
-    
-    private func setPinsDeselected() {
-        let predicate = NSPredicate(format: "isSelected == %@", true)
-        
-        fetchPins(WithPredicate: predicate) { results in
-            guard let results = results else {
-                return
-            }
-            
-            for pin in results {
-                pin.isSelected = false
-            }
         }
     }
     
