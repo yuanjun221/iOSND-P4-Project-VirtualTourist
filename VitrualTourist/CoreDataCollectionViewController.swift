@@ -233,7 +233,6 @@ extension CoreDataCollectionViewController {
             for indexPath in indexPaths {
                 let photo = fetchedResultsControllerForPhotos?.objectAtIndexPath(indexPath) as! Photo
                 context.deleteObject(photo)
-                collectionView?.deselectItemAtIndexPath(indexPath, animated: false)
             }
             context.processPendingChanges()
         }
